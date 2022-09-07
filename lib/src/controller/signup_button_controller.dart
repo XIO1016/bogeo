@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:capstone/src/http/request.dart';
@@ -47,13 +48,14 @@ class SignUpButtonController extends GetxController {
   void apiSignUp() async {
     Get.dialog(Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
-    Request request = Request(url: urlSignUp, body: {
-      'id': idController.text,
-      'password': passwordController.text,
-      'confirmpassword': confirmpasswordController.text,
-      'age': ageController.text,
-      'gender': genderController.text
-    });
+    Request request = Request(
+        url: urlSignUp,
+        body: jsonEncode(<String, dynamic>{
+          'id': idController.text,
+          'password': passwordController.text,
+          'age': int.parse('ageController.text'),
+          'gender': gen[0]['isCheck'] == true ? 'MAN' : 'WOMEN'
+        }));
     request.post().then((value) {
       Get.back();
       Get.offNamed('App');
