@@ -44,6 +44,7 @@ class Login extends GetView<LoginButtonController> {
             ),
           ),
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             centerTitle: true,
             leading: BackButton(color: Colors.black),
             elevation: 0,

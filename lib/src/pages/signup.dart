@@ -30,6 +30,8 @@ class SignUp extends GetView<SignUpButtonController> {
                     // controller.Idoverlap();
                   } else if (controller.pageIndex.value == 2) {
                     // controller.Passconfirm();
+                  } else if (controller.pageIndex.value == 3) {
+                    FocusManager.instance.primaryFocus?.unfocus();
                   } else if (controller.pageIndex.value == 4) {
                     controller.apiSignUp();
                   }
@@ -57,6 +59,7 @@ class SignUp extends GetView<SignUpButtonController> {
           ),
           appBar: AppBar(
             leading: BackButton(color: Colors.black),
+            backgroundColor: Colors.transparent,
             elevation: 0,
           ),
           body: IndexedStack(
