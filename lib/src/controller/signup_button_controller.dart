@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:capstone/src/http/request.dart';
+import '../http/url.dart';
 import 'package:capstone/src/http/url.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../app.dart';
+import 'package:http/http.dart' as http;
 import '../components/message_popup.dart';
 
 enum PageName { ID, PASSWORD, CONFIRMPASS, AGE, GENDER }
@@ -48,18 +46,21 @@ class SignUpButtonController extends GetxController {
   void apiSignUp() async {
     Get.dialog(Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
-    Request request = Request(
-        url: urlSignUp,
+    var request = await http.post(Uri.parse(urlBase + urlLogin),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: jsonEncode(<String, dynamic>{
           'id': idController.text,
           'password': passwordController.text,
           'age': int.parse('ageController.text'),
-          'gender': gen[0]['isCheck'] == true ? 'MAN' : 'WOMEN'
+          'gender': gen[0]['isCheck'] == true ? 'MAN' : 'WOMAN'
+          //     }));
+          // request.post().then((value) {
+          //   Get.back();
+          //   Get.offNamed('App');
+          // }).catchError((onError) {});
         }));
-    request.post().then((value) {
-      Get.back();
-      Get.offNamed('App');
-    }).catchError((onError) {});
   }
 
   @override
@@ -130,5 +131,18 @@ class SignUpButtonController extends GetxController {
 
       return false;
     }
+  }
+
+  Future<bool> ConfirmPassError() async {
+    showDialog(
+        context: Get.context!,
+        builder: (context) => MessagePopup(
+              message: '비밀번호를 다시 확인해주세요',
+              okCallback: () {
+                Get.back();
+              },
+              title: '복어',
+            ));
+    return true;
   }
 }

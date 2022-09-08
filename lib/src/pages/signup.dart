@@ -1,3 +1,4 @@
+import 'package:capstone/src/components/message_popup.dart';
 import 'package:capstone/src/components/signup_component.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,13 +30,19 @@ class SignUp extends GetView<SignUpButtonController> {
                   if (controller.pageIndex.value == 0) {
                     // controller.Idoverlap();
                   } else if (controller.pageIndex.value == 2) {
-                    // controller.Passconfirm();
+                    if (controller.passwordController.text !=
+                        controller.confirmpasswordController.text) {
+                      controller.ConfirmPassError();
+                      return;
+                    }
                   } else if (controller.pageIndex.value == 3) {
                     FocusManager.instance.primaryFocus?.unfocus();
                   } else if (controller.pageIndex.value == 4) {
                     controller.apiSignUp();
                   }
                   if (controller.pageIndex.value != 4) {
+                    print(controller.passwordController.text);
+                    print(controller.confirmpasswordController.text);
                     controller.changesignuppage(controller.pageIndex.value + 1);
                   }
                 }),

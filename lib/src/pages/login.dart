@@ -89,6 +89,7 @@ class Login extends GetView<LoginButtonController> {
                         labelText: "비밀번호",
                         labelStyle: TextStyle(fontFamily: "Sans"),
                       ),
+                      obscureText: true,
                       validator: (value) =>
                           value!.trim().isEmpty ? 'ps required' : null,
                     ),

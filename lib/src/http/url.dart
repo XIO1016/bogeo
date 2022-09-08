@@ -1,3 +1,3 @@
-const urlBase = 'https://9723-219-255-207-61.ngrok.io/';
+const urlBase = 'https://3394-125-133-56-192.ngrok.io/';
 const urlLogin = 'auth/login';
 const urlSignUp = 'auth/signup';

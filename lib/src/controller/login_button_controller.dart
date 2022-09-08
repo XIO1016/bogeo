@@ -1,12 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
-
-import 'package:capstone/src/app.dart';
+import '../components/message_popup2.dart';
+import '../http/url.dart';
 import 'package:capstone/src/http/url.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:http/http.dart' as http;
 import '../components/message_popup.dart';
-import '../http/request.dart';
 
 enum PageName { ID, PASSWORD }
 
@@ -26,13 +26,27 @@ class LoginButtonController extends GetxController {
   void apiLogin() async {
     Get.dialog(Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
-    Request request = Request(
-        url: urlLogin,
-        body: {'id': idController.text, 'password': passwordController.text});
-    request.post().then((value) {
-      Get.back();
-      Get.offNamed('App');
-    }).catchError((onError) {});
+    var request = await http.post(Uri.parse(urlBase + urlLogin),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'id': idController.text,
+          'password': passwordController.text
+        }));
+
+    if (request.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(request.body);
+      print(body);
+    } else {
+      Map<String, dynamic> body = jsonDecode(request.body);
+      print(body);
+      LoginError(body['message']);
+    }
+    // request.post().then((value) {
+    //   Get.back();
+    //   Get.offNamed('App');
+    // }).catchError((onError) {});
   }
 
   @override
@@ -83,5 +97,19 @@ class LoginButtonController extends GetxController {
 
       return false;
     }
+  }
+
+  Future<bool> LoginError(String message) async {
+    showDialog(
+        context: Get.context!,
+        builder: (context) => MessagePopup2(
+              message: message,
+              okCallback: () {
+                Get.back();
+                Get.back();
+              },
+              title: '복어',
+            ));
+    return true;
   }
 }
