@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../pages/mainhome.dart';
 
-enum PageName { HOME, EATPILL, PLUS, PILL, USER }
+enum PageName { HOME, SEARCH, PLUS, EATPILL, USER }
 
 class BottomNavController extends GetxController {
   RxInt pageIndex = 0.obs;
@@ -18,7 +18,7 @@ class BottomNavController extends GetxController {
       // break;
       case PageName.EATPILL:
       case PageName.PLUS:
-      case PageName.PILL:
+      case PageName.SEARCH:
       case PageName.USER:
         _changePage(value, hasGesture: hasGesture);
         break;

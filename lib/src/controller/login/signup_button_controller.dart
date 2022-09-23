@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import '../http/url.dart';
+import '../../http/url.dart';
 import 'package:capstone/src/http/url.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../components/message_popup.dart';
+import '../../components/message_popup.dart';
 
 enum PageName { ID, PASSWORD, CONFIRMPASS, AGE, GENDER }
 

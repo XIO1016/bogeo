@@ -1,8 +1,8 @@
 import 'package:capstone/src/components/message_popup.dart';
-import 'package:capstone/src/components/signup_component.dart';
+import 'package:capstone/src/components/login/signup_component.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controller/signup_button_controller.dart';
+import '../controller/login/signup_button_controller.dart';
 
 class SignUp extends GetView<SignUpButtonController> {
   var maincolor = Colors.blue;

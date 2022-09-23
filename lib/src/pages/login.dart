@@ -1,12 +1,10 @@
-import 'package:capstone/src/components/login_component.dart';
-import 'package:capstone/src/controller/login_button_controller.dart';
+import 'package:capstone/src/components/login/login_component.dart';
+import 'package:capstone/src/controller/login/login_button_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends GetView<LoginButtonController> {
   var maincolor = Colors.blue;
-  final Future<SharedPreferences> pref = SharedPreferences.getInstance();
   Login({super.key});
 
   @override
@@ -32,7 +30,6 @@ class Login extends GetView<LoginButtonController> {
                     String password = controller.passwordController.text;
 
                     controller.apiLogin();
-                    updateshared(id, password);
                   } else {
                     controller.changeloginpage(controller.pageIndex.value + 1);
                   }
@@ -103,10 +100,4 @@ class Login extends GetView<LoginButtonController> {
       ),
     );
   }
-}
-
-void updateshared(String id, String password) async {
-  final SharedPreferences pref = await SharedPreferences.getInstance();
-  pref.setString('id', id);
-  pref.setString('password', password);
 }

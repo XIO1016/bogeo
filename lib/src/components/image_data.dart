@@ -28,5 +28,7 @@ class IconsPath {
   static String get pillOff => 'assets/images/pilloff.png';
   static String get userOn => 'assets/images/user.png';
   static String get userOff => 'assets/images/useroff.png';
+  static String get searchOn => 'assets/images/search.png';
+  static String get searchOff => 'assets/images/searchoff.png';
   static String get plus => 'assets/images/plus.png';
 }

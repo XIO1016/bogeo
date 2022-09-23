@@ -1,32 +1,15 @@
-class UserData {
-  late String id;
-  late String password;
-  late int age;
-  late int gender;
+class Login {
+  final String password;
+  final String user_id;
 
-  UserData(
-      {required this.id,
-      required this.password,
-      required this.age,
-      required this.gender});
+  Login(this.password, this.user_id);
 
-  UserData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    password = json['password'];
-    age = json['age'];
-    gender = json['gender'];
-  }
+  Login.fromJson(Map<String, dynamic> json)
+      : password = json['password'],
+        user_id = json['user_id'];
 
-  // 이거는 return이 있기 때문에 getter와 같은 역할
-  // fromJson에서 UserData에 값을 담고 이 getter를 통해 데이터를 호출
-  // UserData.toJson()으로 호출
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = this.id;
-    data['password'] = this.password;
-    data['age'] = this.age;
-    data['gender'] = this.gender;
-
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        'password': password,
+        'user_id': user_id,
+      };
 }

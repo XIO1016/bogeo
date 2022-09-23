@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../pages/signup.dart';
+import '../../pages/signup.dart';
 
 class LoginComponent extends StatelessWidget {
   int id;
