@@ -3,6 +3,7 @@
 import 'package:capstone/src/components/image_data.dart';
 import 'package:capstone/src/controller/bottom_nav_controller.dart';
 import 'package:capstone/src/pages/mainhome.dart';
+import 'package:capstone/src/pages/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,11 +49,7 @@ class App extends GetView<BottomNavController> {
                   child: Text('EATPILL'),
                 ),
               ),
-              Container(
-                child: Center(
-                  child: Text('USER'),
-                ),
-              ),
+              UserPage()
             ],
           ),
           bottomNavigationBar: Container(

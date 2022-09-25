@@ -1,3 +1,3 @@
-const urlBase = 'http://7549-125-133-56-192.ngrok.io/';
+const urlBase = 'http://13.125.181.17:8080/';
 const urlLogin = 'auth/login';
 const urlSignUp = 'auth/signup';

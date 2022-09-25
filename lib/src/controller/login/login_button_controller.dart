@@ -67,16 +67,12 @@ class LoginButtonController extends GetxController {
       );
       print(body);
       Get.back();
-      Get.offNamed('App');
+      Get.toNamed('/App');
     } else {
       Map<String, dynamic> body = jsonDecode(request.body);
       print(body);
-      LoginError(body['message']);
+      LoginError('아이디 혹은 비밀번호가 틀렸습니다.');
     }
-    // request.post().then((value) {
-    //   Get.back();
-    //   Get.offNamed('App');
-    // }).catchError((onError) {});
   }
 
   @override

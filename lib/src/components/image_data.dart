@@ -20,15 +20,11 @@ class ImageData extends StatelessWidget {
 }
 
 class IconsPath {
-  static String get homeOn => 'assets/images/home.png';
-  static String get homeOff => 'assets/images/homeoff.png';
-  static String get eatpillOn => 'assets/images/eatpill.png';
-  static String get eatpillOff => 'assets/images/eatpilloff.png';
-  static String get pillOn => 'assets/images/pill.png';
-  static String get pillOff => 'assets/images/pilloff.png';
-  static String get userOn => 'assets/images/user.png';
-  static String get userOff => 'assets/images/useroff.png';
-  static String get searchOn => 'assets/images/search.png';
-  static String get searchOff => 'assets/images/searchoff.png';
-  static String get plus => 'assets/images/plus.png';
+  static String get pillType1 => 'assets/images/pill1.png';
+  static String get pillType2 => 'assets/images/pill2.png';
+  static String get pillType3 => 'assets/images/pill3.png';
+  static String get disease => 'assets/images/disease.png';
+  static String get drugs => 'assets/images/drugs.png';
+  static String get allergy => 'assets/images/allergy.png';
+  static String get extra => 'assets/images/inspection.png';
 }

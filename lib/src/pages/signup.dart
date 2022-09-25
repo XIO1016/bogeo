@@ -28,10 +28,10 @@ class SignUp extends GetView<SignUpButtonController> {
                         borderRadius: BorderRadius.circular(0.0))),
                 onPressed: (() {
                   if (controller.pageIndex.value == 0) {
-                    // controller.Idoverlap();
+                    controller.Idoverlap();
                   } else if (controller.pageIndex.value == 2) {
-                    if (controller.passwordController.text !=
-                        controller.confirmpasswordController.text) {
+                    if (controller.textcontroller[1].text !=
+                        controller.textcontroller[2].text) {
                       controller.ConfirmPassError();
                       return;
                     }
@@ -41,8 +41,6 @@ class SignUp extends GetView<SignUpButtonController> {
                     controller.apiSignUp();
                   }
                   if (controller.pageIndex.value != 4) {
-                    print(controller.passwordController.text);
-                    print(controller.confirmpasswordController.text);
                     controller.changesignuppage(controller.pageIndex.value + 1);
                   }
                 }),
@@ -78,7 +76,7 @@ class SignUp extends GetView<SignUpButtonController> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: TextFormField(
-                      controller: controller.idController,
+                      controller: controller.textcontroller[0],
                       autofocus: true,
                       autocorrect: false,
                       decoration: const InputDecoration(
@@ -98,7 +96,7 @@ class SignUp extends GetView<SignUpButtonController> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: TextFormField(
-                      controller: controller.passwordController,
+                      controller: controller.textcontroller[1],
                       autofocus: true,
                       autocorrect: false,
                       decoration: const InputDecoration(
@@ -118,7 +116,7 @@ class SignUp extends GetView<SignUpButtonController> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: TextFormField(
-                      controller: controller.confirmpasswordController,
+                      controller: controller.textcontroller[2],
                       autofocus: true,
                       autocorrect: false,
                       decoration: const InputDecoration(
@@ -141,7 +139,7 @@ class SignUp extends GetView<SignUpButtonController> {
                     child: TextFormField(
                       autofocus: true,
                       autocorrect: false,
-                      controller: controller.ageController,
+                      controller: controller.textcontroller[3],
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: "나이",

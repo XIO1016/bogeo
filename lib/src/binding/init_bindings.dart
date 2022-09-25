@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../controller/login/signup_button_controller.dart';
 import '../controller/mainhome_controller.dart';
+import '../controller/user_controller.dart';
 
 class InitBinding extends Bindings {
   @override
@@ -12,5 +13,6 @@ class InitBinding extends Bindings {
     Get.put(LoginButtonController(), permanent: true);
     Get.put(SignUpButtonController(), permanent: true);
     Get.put(MainHomeController(), permanent: true);
+    Get.put(UserController(), permanent: true);
   }
 }

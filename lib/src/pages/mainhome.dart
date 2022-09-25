@@ -1,5 +1,6 @@
 import 'package:capstone/main.dart';
 import 'package:capstone/src/app.dart';
+import 'package:capstone/src/components/image_data.dart';
 import 'package:capstone/src/controller/mainhome_controller.dart';
 import 'package:capstone/src/pages/eatpill.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ class MainHome extends GetView<MainHomeController> {
 
   Widget _todayeatpill() {
     return Container(
-      height: 64,
+      height: 75,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
           boxShadow: [
@@ -89,16 +90,27 @@ class MainHome extends GetView<MainHomeController> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 0, 25, 0),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              '타이레놀 1정',
-              style: TextStyle(
-                  fontFamily: 'Sans',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500),
+            Row(
+              children: [
+                ImageData(
+                  controller.image.value,
+                  width: 80,
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  '타이레놀 1정',
+                  style: TextStyle(
+                      fontFamily: 'Sans',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
             ),
             IconButton(
                 onPressed: () => Get.toNamed('/Eatpill'),
