@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:capstone/network/dio_client.dart';
+import 'package:dio/dio.dart';
+
 import '../../components/message_popup2.dart';
 import '../../http/url.dart';
 import 'package:capstone/src/http/url.dart';
@@ -14,12 +17,21 @@ import '../../model/userData.dart';
 enum PageName { ID, PASSWORD }
 
 class LoginButtonController extends GetxController {
+  static LoginButtonController get to => Get.find<LoginButtonController>();
+
   RxInt pageIndex = 0.obs;
   List<int> bottomHistory = [0];
   late TextEditingController idController;
   late TextEditingController passwordController;
   static final storage = FlutterSecureStorage();
   dynamic userInfo = '';
+
+  RxString id = "".obs;
+  RxInt age = 0.obs;
+  RxString gender = "".obs;
+  String token1 = "";
+  String token2 = "";
+
   @override
   void onInit() {
     idController = TextEditingController();
@@ -34,18 +46,23 @@ class LoginButtonController extends GetxController {
     // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
     // 데이터가 없을때는 null을 반환
     userInfo = await storage.read(key: 'login');
+    print(userInfo);
 
     // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
     if (userInfo != null) {
-      Get.offNamed('/App');
+      id(jsonDecode(userInfo)['user_id']);
+      idController.text = id.toString();
+      passwordController.text = jsonDecode(userInfo)['password'];
+      apiLogin(1);
     } else {
       print('로그인이 필요합니다');
     }
   }
 
-  void apiLogin() async {
+  void apiLogin(int i) async {
     Get.dialog(Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
+
     var request = await http.post(Uri.parse(urlBase + urlLogin),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -54,20 +71,23 @@ class LoginButtonController extends GetxController {
           'id': idController.text,
           'password': passwordController.text
         }));
-    print(request);
-    print(idController.text);
-    print(passwordController.text);
 
     if (request.statusCode == 200) {
-      Map<String, dynamic> body = jsonDecode(request.body);
       var val = jsonEncode(Login(passwordController.text, idController.text));
-      await storage.write(
-        key: 'login',
-        value: val,
-      );
-      print(body);
+      if (i == 0) {
+        await storage.write(
+          key: 'login',
+          value: val,
+        );
+      }
+      token1 = jsonDecode(request.body)['accessToken'];
+      token2 = jsonDecode(request.body)['refreshToken'];
+      print(token1);
+      print(token2);
+
+      _getProfile(token1, token2);
       Get.back();
-      Get.toNamed('/App');
+      Get.toNamed('App');
     } else {
       Map<String, dynamic> body = jsonDecode(request.body);
       print(body);
@@ -80,6 +100,36 @@ class LoginButtonController extends GetxController {
     idController.dispose();
     passwordController.dispose();
     super.onClose();
+  }
+
+  Future<void> _getProfile(String t1, String t2) async {
+    var profileRequest =
+        await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      // ignore: prefer_interpolation_to_compose_strings
+      'Authorization': 'Bearer ' + token1,
+    });
+    if (profileRequest.statusCode == 401) {
+      print(profileRequest.headers);
+      profileRequest =
+          await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        // ignore: prefer_interpolation_to_compose_strings
+        'Authorization': 'Bearer ' + token1,
+        'refreshToken': 'Bearer ' + token2
+      });
+    } else if (profileRequest.statusCode == 200) {
+      print('success!');
+      print(profileRequest.body);
+    } else {
+      print(profileRequest.body);
+    }
+    age(jsonDecode(profileRequest.body)['age']);
+    if (jsonDecode(profileRequest.body)['gender'] == 'WOMAN') {
+      gender('여자');
+    } else {
+      gender('남자');
+    }
   }
 
   void changeloginpage(int value, {bool hasGesture = true}) {
@@ -137,5 +187,16 @@ class LoginButtonController extends GetxController {
               title: '복어',
             ));
     return true;
+  }
+
+  void getUserProfile() async {
+    var request = await http.post(Uri.parse(urlBase + urlLogin),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'id': idController.text,
+          'password': passwordController.text
+        }));
   }
 }

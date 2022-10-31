@@ -29,7 +29,7 @@ class Login extends GetView<LoginButtonController> {
                     String id = controller.idController.text;
                     String password = controller.passwordController.text;
 
-                    controller.apiLogin();
+                    controller.apiLogin(0);
                   } else {
                     controller.changeloginpage(controller.pageIndex.value + 1);
                   }

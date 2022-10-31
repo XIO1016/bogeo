@@ -66,7 +66,7 @@ class SignUpButtonController extends GetxController {
 
     Get.dialog(Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
-    var request = await http.post(Uri.parse(urlBase + urlLogin),
+    var request = await http.post(Uri.parse(urlBase + urlSignUp),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

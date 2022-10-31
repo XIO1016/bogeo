@@ -212,6 +212,7 @@ class MainHome extends GetView<MainHomeController> {
             preferredSize: Size.fromHeight(42),
             child: AppBar(
               centerTitle: false,
+              automaticallyImplyLeading: false,
               elevation: 0,
               title: Text(
                 'Bogeo',

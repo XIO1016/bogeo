@@ -12,4 +12,5 @@ class Login {
         'password': password,
         'user_id': user_id,
       };
+  void updateUserData() {}
 }

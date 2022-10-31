@@ -48,8 +48,8 @@ class UserPage extends GetView<UserController> {
                     '${datalist[index]}',
                     style: const TextStyle(
                         fontFamily: 'Sans',
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -89,7 +89,7 @@ class UserPage extends GetView<UserController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
       ),
@@ -124,7 +124,7 @@ class UserPage extends GetView<UserController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${controller.username} 님',
+                                  '${controller.id} 님',
                                   style: const TextStyle(
                                       fontFamily: 'Sans',
                                       fontSize: 24,
@@ -134,7 +134,7 @@ class UserPage extends GetView<UserController> {
                                   height: 5,
                                 ),
                                 Text(
-                                  '만 ${controller.userage}세 ${controller.usergen}',
+                                  '${controller.userage}세 ${controller.usergen}',
                                   style: TextStyle(
                                       fontFamily: 'Sans',
                                       fontSize: 18,
@@ -144,117 +144,30 @@ class UserPage extends GetView<UserController> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 154, 157, 165)
-                                          .withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  width: Get.width - 40,
-                                  height: 100,
-                                  child: Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => Get.toNamed('/Eatpill'),
-                                        child: SizedBox(
-                                          width: (Get.width - 45) / 2,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                '${controller.userPill}',
-                                                style: TextStyle(
-                                                    fontFamily: 'Sans',
-                                                    fontSize: 25,
-                                                    color: maincolor,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              const Text(
-                                                '내 약',
-                                                style: TextStyle(
-                                                    fontFamily: 'Sans',
-                                                    fontSize: 16),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 1,
-                                        height: 70,
-                                        color:
-                                            Color.fromARGB(255, 156, 154, 154),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () => Get.toNamed('/Eatpill'),
-                                        child: SizedBox(
-                                          width: (Get.width - 45) / 2,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                '${controller.userReview}',
-                                                style: TextStyle(
-                                                    fontFamily: 'Sans',
-                                                    fontSize: 25,
-                                                    color: maincolor,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              const Text(
-                                                '리뷰 관리',
-                                                style: TextStyle(
-                                                    fontFamily: 'Sans',
-                                                    fontSize: 16),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
                               ],
                             )),
                           )),
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 Container(
                   width: Get.width,
-                  height: 400,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(
+                          height: 8,
+                        ),
                         const Text(
                           '나의 건강 데이터',
                           style: TextStyle(
                               fontFamily: 'Sans',
-                              fontSize: 22,
+                              fontSize: 23,
                               fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(
@@ -264,62 +177,8 @@ class UserPage extends GetView<UserController> {
                         _healthdata(1),
                         _healthdata(2),
                         _healthdata(3),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: Get.width,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '설정 관리',
-                          style: TextStyle(
-                              fontFamily: 'Sans',
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500),
-                        ),
                         const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            const Icon(
-                              Icons.notifications,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            const Text(
-                              '알림 설정',
-                              style: TextStyle(
-                                  fontFamily: 'Sans',
-                                  fontSize: 18,
-                                  color: Colors.grey),
-                            ),
-                          ],
+                          height: 10,
                         ),
                       ],
                     ),

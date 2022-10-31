@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:capstone/src/binding/init_bindings.dart';
+import 'package:capstone/src/pages/addpill.dart';
 import 'package:capstone/src/pages/eatpill.dart';
 import 'package:capstone/src/pages/login.dart';
 import 'package:capstone/src/pages/mainhome.dart';
@@ -9,7 +12,17 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'src/app.dart';
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   initializeDateFormatting().then((_) => runApp(MyApp()));
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -21,10 +34,11 @@ class MyApp extends StatelessWidget {
       title: '복어',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xff0057A8),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
-          titleTextStyle: TextStyle(color: Colors.black),
+          titleTextStyle:
+              TextStyle(color: Color(0xff505050), fontFamily: 'Sans'),
         ),
       ),
       initialBinding: InitBinding(),
@@ -39,6 +53,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/Eatpill',
           page: () => const EatPillPage(),
+        ),
+        GetPage(
+          name: '/AddPill',
+          page: () => const AddPill(),
         )
       ],
     );
