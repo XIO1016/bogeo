@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:capstone/network/dio_client.dart';
 import 'package:capstone/src/controller/login/login_button_controller.dart';
+import 'package:capstone/src/model/myallpills.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,14 +15,12 @@ class UserController extends GetxController {
   RxString usergen = LoginButtonController.to.gender;
 
   dynamic userInfo = '';
-
-  var dioClient = DioClient(Dio());
-
-  static final storage = FlutterSecureStorage();
-
+  int allPillNum = 0;
+  RxList allPill = [].obs;
   @override
   void onInit() {
     super.onInit();
+    _asyncMethod();
   }
 
   @override
@@ -31,11 +30,8 @@ class UserController extends GetxController {
   }
 
   _asyncMethod() async {
-    // print(jwttoken + '222222222');
-    // username(jsonDecode(userInfo)['user_id']);
-
-    // print(token1);
-    // print(token2);
+    allPillNum = 1;
+    allPill.add(MyAllPillsItem(day: '2022-10-11', item_name: '타이레놀 100mg 정'));
   }
 
   // void apiGetProfile() async {

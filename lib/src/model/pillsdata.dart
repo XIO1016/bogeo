@@ -61,32 +61,4 @@ class PillsItem {
   String toString() {
     return 'PillsItem(item_seq: $item_seq, item_name: $item_name, entp_name: $entp_name, etc_otc_code: $etc_otc_code, material_name: $material_name, storage_method: $storage_method, valid_term: $valid_term, caution: $caution, effect: $effect)';
   }
-
-  @override
-  bool operator ==(covariant PillsItem other) {
-    if (identical(this, other)) return true;
-
-    return other.item_seq == item_seq &&
-        other.item_name == item_name &&
-        other.entp_name == entp_name &&
-        other.etc_otc_code == etc_otc_code &&
-        other.material_name == material_name &&
-        other.storage_method == storage_method &&
-        other.valid_term == valid_term &&
-        other.caution == caution &&
-        other.effect == effect;
-  }
-
-  @override
-  int get hashCode {
-    return item_seq.hashCode ^
-        item_name.hashCode ^
-        entp_name.hashCode ^
-        etc_otc_code.hashCode ^
-        material_name.hashCode ^
-        storage_method.hashCode ^
-        valid_term.hashCode ^
-        caution.hashCode ^
-        effect.hashCode;
-  }
 }

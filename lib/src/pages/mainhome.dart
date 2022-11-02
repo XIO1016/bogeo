@@ -1,363 +1,286 @@
+import 'dart:developer';
+
 import 'package:capstone/main.dart';
 import 'package:capstone/src/app.dart';
 import 'package:capstone/src/components/image_data.dart';
 import 'package:capstone/src/controller/mainhome_controller.dart';
+import 'package:capstone/src/model/mypills.dart';
 import 'package:capstone/src/pages/eatpill.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:retrofit/http.dart';
+import 'package:scroll_app_bar/scroll_app_bar.dart';
 
 class MainHome extends GetView<MainHomeController> {
-  const MainHome({super.key});
+  MainHome({super.key});
   static List<String> time = ['아침', '점심', '저녁'];
+  static List<String> time1 = ['오전', '오후', ''];
+
   static Color maincolor = const Color(0xff0057A8);
-
-  Widget _noweatpill() {
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: BouncingScrollPhysics(),
-        child: Row(
-          children: List.generate(
-            100,
-            (index) => GestureDetector(
-              onTap: () => Get.toNamed('/Eatpill'),
-              child: Container(
-                width: 116,
-                height: 150,
-                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                          offset: Offset(0, 1.0))
-                    ],
-                    borderRadius: BorderRadius.all(Radius.circular(25)),
-                    color: Colors.white),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        '비타민',
-                        style: TextStyle(
-                            fontFamily: 'Sans',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        '2알',
-                        style: TextStyle(
-                            fontFamily: 'Sans',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      GestureDetector(
-                        onTap: () => controller.changeate(),
-                        child: Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: (controller.eating == true)
-                                ? Colors.grey
-                                : maincolor,
-                          ),
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    ]),
-              ),
-            ),
-          ),
-        ));
-  }
-
-  Widget _todayeatpill() {
-    return Container(
-      height: 75,
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 1,
-                blurRadius: 5,
-                offset: Offset(0, 1.0))
-          ],
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.white),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                ImageData(
-                  controller.image.value,
-                  width: 80,
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  '타이레놀 1정',
+  static Color blackcolor = const Color(0xff505050);
+  final controller1 = ScrollController();
+  Widget pills(int i) {
+    return Column(
+      children: [
+        Column(children: PillWidgetList(i)),
+        (controller.pillsdata[3].length == 0)
+            ? const SizedBox()
+            : Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '하루 안에 복용하세요 :)',
                   style: TextStyle(
-                      fontFamily: 'Sans',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
+                      color: blackcolor,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
                 ),
-              ],
-            ),
-            IconButton(
-                onPressed: () => Get.toNamed('/Eatpill'),
-                icon: Icon(IconData(0xf579,
-                    fontFamily: 'MaterialIcons', matchTextDirection: true))),
-          ],
+              ),
+        const SizedBox(
+          height: 20,
         ),
-      ),
+        Column(
+          children: PillWidgetList(3),
+        )
+      ],
     );
   }
 
-  Widget _pillscore() {
-    switch (controller.period.value) {
-      case 0:
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '100점',
-              style: TextStyle(
-                  color: Color(0xff57BD55),
-                  fontFamily: 'Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 40),
+  List<Widget> PillWidgetList(int i) {
+    var pillsdata = controller.pillsdata[i];
+    return (pillsdata.length == 0)
+        ? [
+            Container(
+              width: Get.width,
+              height: 150,
+              child: Center(
+                child: Text(
+                  '먹을 약이 없어요!',
+                  style: TextStyle(
+                      color: blackcolor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              '복용을 잘 지키고 있어요!',
-              style: TextStyle(
-                  fontFamily: 'Sans',
-                  fontSize: 18,
-                  color: Color(0xff1D4B1C),
-                  fontWeight: FontWeight.w500),
+            const SizedBox(
+              height: 50,
             )
-          ],
-        );
-      case 1:
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '50점',
-              style: TextStyle(
-                  color: Color(0xff57BD55),
-                  fontFamily: 'Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 40),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              '복용을 잘 지키고 있어요!',
-              style: TextStyle(
-                  fontFamily: 'Sans',
-                  fontSize: 18,
-                  color: Color(0xff1D4B1C),
-                  fontWeight: FontWeight.w500),
-            )
-          ],
-        );
-      case 2:
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '30점',
-              style: TextStyle(
-                  color: Color(0xff57BD55),
-                  fontFamily: 'Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 40),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              '복용을 잘 지키고 있어요!',
-              style: TextStyle(
-                  fontFamily: 'Sans',
-                  fontSize: 18,
-                  color: Color(0xff1D4B1C),
-                  fontWeight: FontWeight.w500),
-            )
-          ],
-        );
-    }
-    return Container();
+          ]
+        : List.generate(
+            pillsdata.length,
+            ((j) => Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(30, 20, 30, 30),
+                      width: Get.width,
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.2, color: blackcolor),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              (i < 3)
+                                  ? Text(
+                                      '${time1[pillsdata[j].eatingTime3]} ${pillsdata[j].eatingTime}시에 드세요',
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(
+                                            0xff628EFF,
+                                          )),
+                                    )
+                                  : const SizedBox(
+                                      width: 150,
+                                      height: 23,
+                                    ),
+                              Text(
+                                '${pillsdata[j].eatingNum}정',
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal,
+                                    color: Color(0xff505050)),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: 126,
+                                height: 68,
+                                color: Colors.grey,
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              SizedBox(
+                                width: Get.width - 250,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    RichText(
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      text: TextSpan(
+                                        text: pillsdata[j].item_name,
+                                        style: const TextStyle(
+                                            color: Color(0xff505050),
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 17,
+                                    ),
+                                    (pillsdata[j].iseat == false)
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              controller.checkeating(i, j);
+                                              log('check!!!!!!!!');
+                                              log("i=$i,j=$j");
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                const Text(
+                                                  '안먹음',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Color(0xffBABABA)),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/icons/noeat.svg')
+                                              ],
+                                            ),
+                                          )
+                                        : GestureDetector(
+                                            onTap: () {
+                                              controller.checkeating(i, j);
+                                              log("i=$i,j=$j");
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  '먹음',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: maincolor),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/icons/eat.svg')
+                                              ],
+                                            ),
+                                          )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    )
+                  ],
+                )),
+          );
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(42),
-            child: AppBar(
-              centerTitle: false,
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              title: Text(
-                'Bogeo',
-                style: TextStyle(
-                    fontSize: 25,
-                    fontFamily: 'Space',
-                    fontWeight: FontWeight.w600,
-                    color: maincolor),
-              ),
-            )),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: ScrollConfiguration(
-            behavior: const ScrollBehavior().copyWith(overscroll: false),
-            child: ListView(children: [
-              Row(
-                children: [
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    '${time[0]}',
-                    style: const TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontFamily: 'Sans',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const Text(
-                    '에 복용해야할 약이에요!',
-                    style: TextStyle(
-                        fontFamily: 'Sans',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              _noweatpill(),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '오늘 복용할 약',
-                    style: TextStyle(
-                        fontFamily: 'Sans',
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Get.toNamed('/Eatpill'),
-                        child: Text(
-                          '${controller.strToday} (${controller.strday}) >',
-                          style: TextStyle(
-                              fontFamily: 'Sans',
-                              fontSize: 16,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w500),
+      () => SafeArea(
+        child: Scaffold(
+          appBar: ScrollAppBar(
+            controller: controller1,
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            titleSpacing: 20,
+            title: Text(
+              'Bogeo',
+              style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'Space',
+                  fontWeight: FontWeight.w600,
+                  color: maincolor),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          body: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: ScrollConfiguration(
+                behavior: const ScrollBehavior().copyWith(overscroll: false),
+                child: ListView(
+                  controller: controller1,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          controller.strToday.value,
+                          style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff505050)),
                         ),
+                        const SizedBox(width: 10),
+                        Text(
+                          controller.strday.value + '요일',
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xff505050)),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TabBar(
+                        tabs: controller.tabs,
+                        controller: controller.tabController,
+                        labelColor: Color(0xff0057A8),
+                        labelStyle: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                        unselectedLabelColor: Color(0xffBABABA),
+                        indicatorColor: Colors.transparent,
                       ),
-                      SizedBox(
-                        width: 16,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Column(
-                children: [
-                  _todayeatpill(),
-                  _todayeatpill(),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        '내 복용 점수는?',
-                        style: TextStyle(
-                            fontFamily: 'Sans',
-                            fontSize: 25,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      SizedBox(
-                        width: Get.width - 240,
-                      ),
-                      DropdownButton(
-                        elevation: 0,
-                        underline: SizedBox(),
-                        value: controller.period.value,
-                        onChanged: (int? value) {
-                          controller.changeDropMenu(value);
-                        },
-                        style: TextStyle(
-                            fontFamily: 'Sans',
-                            fontSize: 15,
-                            color: Colors.black),
-                        items: [
-                          DropdownMenuItem(
-                            child: Text('일'),
-                            value: 0,
-                          ),
-                          DropdownMenuItem(
-                            child: Text('주'),
-                            value: 1,
-                          ),
-                          DropdownMenuItem(
-                            child: Text('월'),
-                            value: 2,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Container(
-                height: 150,
-                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Color(0xffF5F5F5)),
-                child: _pillscore(),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-            ]),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: [
+                        pills(0),
+                        pills(1),
+                        pills(2),
+                      ][controller.index.value],
+                    ),
+                  ],
+                )),
           ),
         ),
       ),
