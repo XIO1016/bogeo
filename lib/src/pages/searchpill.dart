@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:capstone/src/pages/mainhome.dart';
+import 'package:capstone/src/pages/pilldetail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -50,67 +52,73 @@ class SearchPillPage extends GetView<SearchController> {
   }
 
   Widget _pills(int i) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        border: BorderDirectional(
-          top: BorderSide(
-            color: Color(0xffDEDEDE),
-            width: 1,
+    return GestureDetector(
+      onTap: (() {
+        Get.to(() => DetailPillPage(), arguments: controller.pillsitems[i]);
+        //log('${controller.pillsitems[i].item_name}');
+      }),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          border: BorderDirectional(
+            top: BorderSide(
+              color: Color(0xffDEDEDE),
+              width: 1,
+            ),
           ),
         ),
-      ),
-      child: Row(children: [
-        SizedBox(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Row(children: [
+          SizedBox(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  color: Colors.grey,
+                  width: 134,
+                  height: 70,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 25,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                color: Colors.grey,
-                width: 134,
-                height: 70,
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: 25,
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 173,
-              child: RichText(
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                text: TextSpan(
-                  text: controller.pillsitems[i].item_name,
-                  style: const TextStyle(
-                    color: Color(0xff505050),
-                    fontSize: 17,
-                    fontWeight: FontWeight.normal,
+                width: 173,
+                child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                  text: TextSpan(
+                    text: controller.pillsitems[i].item_name,
+                    style: const TextStyle(
+                      color: Color(0xff505050),
+                      fontSize: 17,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 19,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                general(i),
-                SizedBox(
-                  height: 7,
-                ),
-                general2(i)
-              ],
-            )
-          ],
-        ),
-      ]),
+              SizedBox(
+                height: 19,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  general(i),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  general2(i)
+                ],
+              )
+            ],
+          ),
+        ]),
+      ),
     );
   }
 
