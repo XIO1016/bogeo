@@ -98,7 +98,9 @@ class DetailPillPage extends GetView<DetailPillController> {
                 )
               ],
             ),
-          )
+          ),
+          Image.network(
+              'https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/151335249722200065')
         ]),
       ),
     );
