@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:capstone/network/dio_client.dart';
 import 'package:capstone/src/controller/login/login_button_controller.dart';
 import 'package:capstone/src/model/myallpills.dart';
 import 'package:dio/dio.dart';

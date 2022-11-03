@@ -54,7 +54,9 @@ class SearchPillPage extends GetView<SearchController> {
   Widget _pills(int i) {
     return GestureDetector(
       onTap: (() {
+        controller.getProhibit();
         Get.to(() => DetailPillPage(), arguments: controller.pillsitems[i]);
+
         //log('${controller.pillsitems[i].item_name}');
       }),
       child: Container(

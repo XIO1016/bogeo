@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import '../http/url.dart';
 
 class SearchController extends GetxController {
+  static SearchController get to => Get.find<SearchController>();
   TextEditingController searchTextEditingController = TextEditingController();
   late XmlDocument pillSearchXml;
   List<PillsItem> pillsitems = [];
@@ -19,7 +20,8 @@ class SearchController extends GetxController {
   RxInt resultNum = 0.obs;
   int pageNo = 1;
   int numOfRows = 100;
-
+  RxString prohibitPills = "".obs;
+  RxBool prohibitExist = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -66,5 +68,10 @@ class SearchController extends GetxController {
     // print('eeeeeeeeeeeeeeeeeee');
     // print(resultNum);
     // print(pillsitem);
+  }
+
+  Future getProhibit() async {
+    prohibitExist(true);
+    prohibitPills('타이레놀, 비타민C 1000: 중증의 위장관계 이상 초래');
   }
 }
