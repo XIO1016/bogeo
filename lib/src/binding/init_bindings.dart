@@ -1,4 +1,5 @@
 import 'package:capstone/src/controller/addpill_controller.dart';
+import 'package:capstone/src/controller/addpilltodatacontroller.dart';
 import 'package:capstone/src/controller/bottom_nav_controller.dart';
 import 'package:capstone/src/controller/login/login_button_controller.dart';
 import 'package:get/get.dart';
@@ -22,5 +23,7 @@ class InitBinding extends Bindings {
     Get.put(SearchController(), permanent: true);
 
     Get.put(DetailPillController(), permanent: true);
+
+    Get.put(AddPillToDataController(), permanent: true);
   }
 }

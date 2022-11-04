@@ -45,6 +45,7 @@ dependencies:
   retrofit: ^3.0.1+1
   xml:
   scroll_app_bar: ^2.0.0
+  table_calendar: ^3.0.8
 dev_dependencies:
   retrofit_generator:
   build_runner:

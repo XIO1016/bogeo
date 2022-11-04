@@ -13,8 +13,6 @@ import '../controller/seachpill_controller.dart';
 class SearchPillPage extends GetView<SearchController> {
   List _color = [Color(0xffd2ff99), Color(0xffffd583)];
   List _color2 = [Color(0xfffff599)];
-  List _pilltext = ['일반 의약품', '전문 의약품'];
-  List _pilltext2 = ['해열.진통.소염제'];
 
   Widget _appbar() {
     return Container(
@@ -54,7 +52,7 @@ class SearchPillPage extends GetView<SearchController> {
   Widget _pills(int i) {
     return GestureDetector(
       onTap: (() {
-        controller.getProhibit();
+        // controller.getProhibit();
         Get.to(() => DetailPillPage(), arguments: controller.pillsitems[i]);
 
         //log('${controller.pillsitems[i].item_name}');
@@ -74,11 +72,21 @@ class SearchPillPage extends GetView<SearchController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  color: Colors.grey,
-                  width: 134,
-                  height: 70,
-                ),
+                (controller.pillsitems[i].image == '')
+                    ? Container(
+                        color: Color(0xffE4E4E4),
+                        child: Center(
+                            child: Text(
+                          '사진 없음',
+                          style: TextStyle(fontSize: 12),
+                        )),
+                        width: 134,
+                        height: 70,
+                      )
+                    : Container(
+                        width: 134,
+                        height: 70,
+                        child: Image.network(controller.pillsitems[i].image)),
               ],
             ),
           ),
@@ -128,12 +136,12 @@ class SearchPillPage extends GetView<SearchController> {
     return Container(
       padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
       decoration: BoxDecoration(
-          color: (controller.pillsitems[i].etc_otc_code == '일반의약품')
+          color: (controller.pillsitems[i].medicineCode == '일반의약품')
               ? _color[0]
               : _color[1],
           borderRadius: BorderRadius.circular(10)),
       child: Text(
-        controller.pillsitems[i].etc_otc_code,
+        controller.pillsitems[i].medicineCode,
         style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.normal,
@@ -143,18 +151,20 @@ class SearchPillPage extends GetView<SearchController> {
   }
 
   Widget general2(i) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
-      decoration: BoxDecoration(
-          color: _color2[0], borderRadius: BorderRadius.circular(10)),
-      child: Text(
-        _pilltext2[0],
-        style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.normal,
-            color: Color(0xff6c6c6c)),
-      ),
-    );
+    return (controller.pillsitems[i].class_name == '')
+        ? Container()
+        : Container(
+            padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
+            decoration: BoxDecoration(
+                color: _color2[0], borderRadius: BorderRadius.circular(10)),
+            child: Text(
+              controller.pillsitems[i].class_name,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xff6c6c6c)),
+            ),
+          );
   }
 
   Widget _body() {

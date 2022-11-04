@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:capstone/network/dio_client.dart';
 import 'package:dio/dio.dart';
@@ -29,8 +30,8 @@ class LoginButtonController extends GetxController {
   RxString id = "".obs;
   RxInt age = 0.obs;
   RxString gender = "".obs;
-  String token1 = "";
-  String token2 = "";
+  RxString token1 = "".obs;
+  RxString token2 = "".obs;
 
   @override
   void onInit() {
@@ -80,12 +81,12 @@ class LoginButtonController extends GetxController {
           value: val,
         );
       }
-      token1 = jsonDecode(request.body)['accessToken'];
-      token2 = jsonDecode(request.body)['refreshToken'];
+      token1(jsonDecode(request.body)['accessToken']);
+      token2(jsonDecode(request.body)['refreshToken']);
       print(token1);
       print(token2);
 
-      _getProfile(token1, token2);
+      _getProfile(token1.value, token2.value);
       Get.back();
       Get.toNamed('App');
     } else {
@@ -103,20 +104,24 @@ class LoginButtonController extends GetxController {
   }
 
   Future<void> _getProfile(String t1, String t2) async {
+    log('++++++++++++++++++++++++token');
+    log(token1.value);
+    log(token2.value);
     var profileRequest =
         await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       // ignore: prefer_interpolation_to_compose_strings
-      'Authorization': 'Bearer ' + token1,
+      'Authorization': 'Bearer ' + token1.value,
     });
     if (profileRequest.statusCode == 401) {
       print(profileRequest.headers);
+
       profileRequest =
           await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         // ignore: prefer_interpolation_to_compose_strings
-        'Authorization': 'Bearer ' + token1,
-        'refreshToken': 'Bearer ' + token2
+        'Authorization': 'Bearer ' + token1.value,
+        'refreshToken': 'Bearer ' + token2.value
       });
     } else if (profileRequest.statusCode == 200) {
       print('success!');

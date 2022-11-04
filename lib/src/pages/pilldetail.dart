@@ -1,14 +1,14 @@
-import 'dart:ui';
 import 'dart:developer';
+import 'package:capstone/src/components/Sbox.dart';
 import 'package:capstone/src/controller/detailPillController.dart';
 import 'package:capstone/src/model/pillsdata.dart';
+import 'package:capstone/src/pages/addpilltodata.dart';
 import 'package:capstone/src/pages/mainhome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
-import '../components/buttonWidget.dart';
 import '../components/text_component.dart';
 
 class DetailPillPage extends GetView<DetailPillController> {
@@ -32,7 +32,8 @@ class DetailPillPage extends GetView<DetailPillController> {
             elevation: 0,
             backgroundColor: Colors.white,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
+              icon:
+                  Icon(Icons.keyboard_arrow_left_rounded, color: Colors.black),
               onPressed: () => Get.back(),
             ),
             title: Text('detail'),
@@ -64,7 +65,7 @@ class DetailPillPage extends GetView<DetailPillController> {
                       height: 5,
                     ),
                     Text(
-                      pillsitem.entp_name,
+                      'hello',
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.normal),
                     ),
@@ -161,7 +162,10 @@ class DetailPillPage extends GetView<DetailPillController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text1('효능 효과', Color(0xffBababa)),
-                                Text1('data', Color(0xff505050))
+                                Sbox(0, 5),
+                                Text1(
+                                    ' 감기로 인한 발열 및 동통(통증), 두통, 신경통, 근육통, 월경통, 염좌통(삔 통증), 치통, 관절통, 류마티양 통증 등에 사용할 수 있음.',
+                                    Color(0xff505050))
                               ],
                             ),
                             const SizedBox(
@@ -171,7 +175,10 @@ class DetailPillPage extends GetView<DetailPillController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text1('주성분', Color(0xffBababa)),
-                                Text1('data', Color(0xff505050))
+                                Sbox(0, 5),
+                                Text1(
+                                    '1정중 : 아세트아미노펜 과립 88.89mg(아세트아미노펜으로서 80mg)',
+                                    Color(0xff505050))
                               ],
                             ),
                             const SizedBox(
@@ -181,7 +188,8 @@ class DetailPillPage extends GetView<DetailPillController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text1('저장방법', Color(0xffBababa)),
-                                Text1('data', Color(0xff505050))
+                                Sbox(0, 5),
+                                Text1('실온 보관', Color(0xff505050))
                               ],
                             ),
                             const SizedBox(
@@ -191,7 +199,8 @@ class DetailPillPage extends GetView<DetailPillController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text1('유효기간', Color(0xffBababa)),
-                                Text1('data', Color(0xff505050))
+                                Sbox(0, 5),
+                                Text1('제조 후 1년', Color(0xff505050))
                               ],
                             ),
                             const SizedBox(
@@ -233,4 +242,25 @@ class DetailPillPage extends GetView<DetailPillController> {
           ),
         ));
   }
+}
+
+Widget PlusWidget() {
+  return GestureDetector(
+    onTap: () {
+      Get.to(AddPillToData());
+    },
+    child: Container(
+      width: Get.width,
+      height: 60,
+      decoration: BoxDecoration(
+          color: Color(0xff628EFF), borderRadius: BorderRadius.circular(15)),
+      child: const Center(
+        child: Text(
+          '약 추가하기',
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ),
+    ),
+  );
 }

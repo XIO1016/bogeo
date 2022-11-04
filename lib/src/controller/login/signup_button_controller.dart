@@ -41,7 +41,7 @@ class SignUpButtonController extends GetxController {
     Get.dialog(Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
     var request = await http.get(
-      Uri.parse(urlBase + urlSignUp + '/check?id=${textcontroller[0].text}'),
+      Uri.parse(urlBase + urlSignUp + '/ㄹcheck?id=${textcontroller[0].text}'),
     );
 
     print(request.body);

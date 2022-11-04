@@ -1,15 +1,8 @@
 import 'dart:developer';
-
-import 'package:capstone/main.dart';
-import 'package:capstone/src/app.dart';
-import 'package:capstone/src/components/image_data.dart';
 import 'package:capstone/src/controller/mainhome_controller.dart';
-import 'package:capstone/src/model/mypills.dart';
-import 'package:capstone/src/pages/eatpill.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:retrofit/http.dart';
 import 'package:scroll_app_bar/scroll_app_bar.dart';
 
 class MainHome extends GetView<MainHomeController> {
@@ -143,8 +136,6 @@ class MainHome extends GetView<MainHomeController> {
                                         ? GestureDetector(
                                             onTap: () {
                                               controller.checkeating(i, j);
-                                              log('check!!!!!!!!');
-                                              log("i=$i,j=$j");
                                             },
                                             child: Row(
                                               mainAxisAlignment:
