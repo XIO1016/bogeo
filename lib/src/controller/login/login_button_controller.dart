@@ -58,15 +58,13 @@ class LoginButtonController extends GetxController {
       id(jsonDecode(userInfo)['user_id']);
       idController.text = id.toString();
       passwordController.text = jsonDecode(userInfo)['password'];
-      apiLogin(1);
-
-      getMyPills();
+      await apiLogin(1);
     } else {
       print('로그인이 필요합니다');
     }
   }
 
-  void apiLogin(int i) async {
+  Future apiLogin(int i) async {
     Get.dialog(Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
 
@@ -95,6 +93,8 @@ class LoginButtonController extends GetxController {
       print(token2);
 
       _getProfile(token1.value, token2.value);
+
+      await getMyPills();
       Get.back();
       Get.toNamed('App');
     } else {
@@ -227,7 +227,7 @@ class LoginButtonController extends GetxController {
           'Content-Type': 'application/json; charset=UTF-8',
           // ignore: prefer_interpolation_to_compose_strings
           'Authorization': 'Bearer ' + token1.value,
-          'refreshToken': 'Bearer ' + token2.value,
+          'refreshToken': 'Bearer ' + token2.value
         });
     log(getMedicineRequest.body);
     if (getMedicineRequest.statusCode == 200) {
@@ -239,18 +239,17 @@ class LoginButtonController extends GetxController {
         var pillsitem;
 
         if (pilllist['hasMedicineTime']) {
-          List time = pilllist['medicineTime'].split(':')[0];
-
+          var time = pilllist['medicineTime'].split(':');
           if (int.parse(time[0]) >= 12) {
             eatingTime3 = 1;
           } else {
-            eatingTime3 = 2;
+            eatingTime3 = 0;
           }
           pillsitem = MyPillsItem(
             item_seq: pilllist['medicineSeq'],
             item_name: pilllist['medicineName'],
             eatingNum: pilllist['dosage'],
-            eatingTime: time[0],
+            eatingTime: int.parse(time[0]),
             eatingTime3: eatingTime3,
             endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
             hasEndDay: pilllist['hasEndDay'],
@@ -269,7 +268,7 @@ class LoginButtonController extends GetxController {
             item_seq: pilllist['medicineSeq'],
             item_name: pilllist['medicineName'],
             eatingNum: pilllist['dosage'],
-            eatingTime: '0',
+            eatingTime: 0,
             eatingTime3: eatingTime3,
             endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
             hasEndDay: pilllist['hasEndDay'],

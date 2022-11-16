@@ -4,7 +4,7 @@ import 'dart:convert';
 class MyPillsItem {
   String item_seq;
   String item_name;
-  String eatingTime;
+  int eatingTime;
   bool iseat;
   int eatingNum;
   int eatingTime3;

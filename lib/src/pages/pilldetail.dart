@@ -41,7 +41,7 @@ class DetailPillPage extends GetView<DetailPillController> {
           body: SizedBox(
             width: Get.width,
             child: ListView(children: [
-              (pillsitem.image == null)
+              (pillsitem.image == '')
                   ? pillImageWidget()
                   : Image.network(pillsitem.image),
               Padding(

@@ -68,11 +68,22 @@ class MainHomeController extends GetxController
   ];
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
     tabController = TabController(length: tabs.length, vsync: this);
     tabController.addListener(handleTab);
+    // await getMyPills();
     // getMyPills();
+    if (DateTime.now().hour <= 10) {
+      tabController.index = 0;
+      index(0);
+    } else if (10 < DateTime.now().hour && DateTime.now().hour <= 17) {
+      tabController.index = 1;
+      index(1);
+    } else {
+      tabController.index = 2;
+      index(2);
+    }
   }
 
   @override
@@ -125,7 +136,7 @@ class MainHomeController extends GetxController
         var pillsitem;
 
         if (pilllist['hasMedicineTime']) {
-          List time = pilllist['medicineTime'].split(':')[0];
+          var time = pilllist['medicineTime'].split(':')[0];
 
           if (int.parse(time[0]) >= 12) {
             eatingTime3 = 1;
@@ -143,9 +154,9 @@ class MainHomeController extends GetxController
             iseat: pilllist['activated'],
             period: pilllist['period'],
           );
-          if (int.parse(time[0]) <= 9) {
+          if (int.parse(time[0]) <= 10) {
             pillsdata[0].add(pillsitem);
-          } else if (9 < int.parse(time[0]) && int.parse(time[0]) <= 17) {
+          } else if (10 < int.parse(time[0]) && int.parse(time[0]) <= 17) {
             pillsdata[1].add(pillsitem);
           } else {
             pillsdata[2].add(pillsitem);
@@ -155,7 +166,7 @@ class MainHomeController extends GetxController
             item_seq: pilllist['medicineSeq'],
             item_name: pilllist['medicineName'],
             eatingNum: pilllist['dosage'],
-            eatingTime: '0',
+            eatingTime: 0,
             eatingTime3: eatingTime3,
             endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
             hasEndDay: pilllist['hasEndDay'],

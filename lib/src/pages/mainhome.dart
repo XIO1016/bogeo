@@ -32,9 +32,11 @@ class MainHome extends GetView<MainHomeController> {
         const SizedBox(
           height: 20,
         ),
-        Column(
-          children: PillWidgetList(3),
-        )
+        (controller.pillsdata[3].length == 0)
+            ? const SizedBox()
+            : Column(
+                children: PillWidgetList(3),
+              )
       ],
     );
   }
@@ -65,7 +67,7 @@ class MainHome extends GetView<MainHomeController> {
             ((j) => Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(30, 20, 30, 30),
+                      padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
                       width: Get.width,
                       decoration: BoxDecoration(
                           border: Border.all(width: 0.2, color: blackcolor),
@@ -99,7 +101,7 @@ class MainHome extends GetView<MainHomeController> {
                             ],
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
