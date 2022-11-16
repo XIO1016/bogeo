@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:capstone/src/components/Sbox.dart';
 import 'package:capstone/src/controller/detailPillController.dart';
 import 'package:capstone/src/model/pillsdata.dart';
-import 'package:capstone/src/pages/addpilltodata.dart';
 import 'package:capstone/src/pages/mainhome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 import '../components/text_component.dart';
+import 'add/addpilltodata.dart';
 
 class DetailPillPage extends GetView<DetailPillController> {
   PillsItem pillsitem = Get.arguments;
@@ -36,12 +36,14 @@ class DetailPillPage extends GetView<DetailPillController> {
                   Icon(Icons.keyboard_arrow_left_rounded, color: Colors.black),
               onPressed: () => Get.back(),
             ),
-            title: Text('detail'),
+            title: Text('약 세부사항'),
           ),
           body: SizedBox(
             width: Get.width,
             child: ListView(children: [
-              pillImageWidget(),
+              (pillsitem.image == null)
+                  ? pillImageWidget()
+                  : Image.network(pillsitem.image),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -65,7 +67,7 @@ class DetailPillPage extends GetView<DetailPillController> {
                       height: 5,
                     ),
                     Text(
-                      'hello',
+                      pillsitem.entp_name,
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.normal),
                     ),
@@ -137,20 +139,36 @@ class DetailPillPage extends GetView<DetailPillController> {
                                         height: 5,
                                       ),
                                       (controller.prohibitClick == true)
-                                          ? Container(
-                                              padding: const EdgeInsets.all(8),
-                                              width: Get.width,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xffF5F5F5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Text(
-                                                controller
-                                                    .prohibitMedicine.value,
-                                                style: TextStyle(fontSize: 16),
-                                              ),
-                                            )
+                                          ? Column(
+                                              children: List<Widget>.generate(
+                                                  pillsitem.combinationsnum,
+                                                  (index) {
+                                              return Column(
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    width: Get.width,
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0xffF5F5F5),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        text:
+                                                            '${pillsitem.combinations[index]['medicineName']} : ${pillsitem.combinations[index]['prohibitContent'].trim()} ',
+                                                        style: TextStyle(
+                                                            color: blackcolor,
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Sbox(0, 8)
+                                                ],
+                                              );
+                                            }))
                                           : Container(),
                                     ],
                                   )
@@ -163,9 +181,7 @@ class DetailPillPage extends GetView<DetailPillController> {
                               children: [
                                 Text1('효능 효과', Color(0xffBababa)),
                                 Sbox(0, 5),
-                                Text1(
-                                    ' 감기로 인한 발열 및 동통(통증), 두통, 신경통, 근육통, 월경통, 염좌통(삔 통증), 치통, 관절통, 류마티양 통증 등에 사용할 수 있음.',
-                                    Color(0xff505050))
+                                Text1(pillsitem.effect, Color(0xff505050))
                               ],
                             ),
                             const SizedBox(
@@ -176,9 +192,11 @@ class DetailPillPage extends GetView<DetailPillController> {
                               children: [
                                 Text1('주성분', Color(0xffBababa)),
                                 Sbox(0, 5),
-                                Text1(
-                                    '1정중 : 아세트아미노펜 과립 88.89mg(아세트아미노펜으로서 80mg)',
-                                    Color(0xff505050))
+                                Text(pillsitem.ingredient,
+                                    style: TextStyle(
+                                        color: Color(0xff505050),
+                                        fontSize: 16,
+                                        height: 1.5))
                               ],
                             ),
                             const SizedBox(
@@ -189,7 +207,7 @@ class DetailPillPage extends GetView<DetailPillController> {
                               children: [
                                 Text1('저장방법', Color(0xffBababa)),
                                 Sbox(0, 5),
-                                Text1('실온 보관', Color(0xff505050))
+                                Text1(pillsitem.method, Color(0xff505050))
                               ],
                             ),
                             const SizedBox(
@@ -200,13 +218,13 @@ class DetailPillPage extends GetView<DetailPillController> {
                               children: [
                                 Text1('유효기간', Color(0xffBababa)),
                                 Sbox(0, 5),
-                                Text1('제조 후 1년', Color(0xff505050))
+                                Text1(pillsitem.validterm, Color(0xff505050))
                               ],
                             ),
                             const SizedBox(
                               height: 40,
                             ),
-                            PlusWidget()
+                            PlusWidget(pillsitem)
                           ],
                         ),
                         Column(
@@ -214,23 +232,29 @@ class DetailPillPage extends GetView<DetailPillController> {
                             const SizedBox(
                               height: 30,
                             ),
-                            Text1('주의사항', Color(0xff505050)),
+                            Text(pillsitem.warning,
+                                style: TextStyle(
+                                    color: Color(
+                                      0xff505050,
+                                    ),
+                                    height: 1.5)),
                             const SizedBox(
                               height: 40,
                             ),
-                            PlusWidget()
+                            PlusWidget(pillsitem)
                           ],
                         ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(
                               height: 30,
                             ),
-                            Text1('복용방법', Color(0xff505050)),
+                            Text1(pillsitem.dosage, Color(0xff505050)),
                             const SizedBox(
-                              height: 40,
+                              height: 80,
                             ),
-                            PlusWidget()
+                            PlusWidget(pillsitem)
                           ],
                         )
                       ][controller.index.value],
@@ -244,10 +268,10 @@ class DetailPillPage extends GetView<DetailPillController> {
   }
 }
 
-Widget PlusWidget() {
+Widget PlusWidget(PillsItem pill) {
   return GestureDetector(
     onTap: () {
-      Get.to(AddPillToData());
+      Get.to(() => AddPillToData(), arguments: [0, pill]);
     },
     child: Container(
       width: Get.width,

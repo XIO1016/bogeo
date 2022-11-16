@@ -8,7 +8,6 @@ class DetailPillController extends GetxController
     with GetSingleTickerProviderStateMixin {
   RxBool prohibitClick = false.obs;
 
-  RxString prohibitMedicine = SearchController.to.prohibitPills;
   RxBool prohibitExist = SearchController.to.prohibitExist;
   RxInt index = 0.obs;
   late TabController tabController;

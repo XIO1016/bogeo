@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:capstone/src/binding/init_bindings.dart';
-import 'package:capstone/src/pages/addpill.dart';
+import 'package:capstone/src/pages/add/addpill.dart';
+import 'package:capstone/src/pages/add/addpilltodata.dart';
 import 'package:capstone/src/pages/eatpill.dart';
 import 'package:capstone/src/pages/login.dart';
 import 'package:capstone/src/pages/mainhome.dart';
@@ -52,12 +53,16 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/Eatpill',
-          page: () => const EatPillPage(),
+          page: () => EatPillPage(),
         ),
         GetPage(
           name: '/AddPill',
-          page: () => const AddPill(),
-        )
+          page: () => addpillPage(),
+        ),
+        GetPage(
+          name: '/AddPilltoData',
+          page: () => AddPillToData(),
+        ),
       ],
     );
   }

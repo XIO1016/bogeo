@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddPillController extends GetxController {
+class AddPillwithCameraController extends GetxController {
   late CameraController cameraController;
   RxBool cameraInitialized = false.obs;
   var pickedFile;

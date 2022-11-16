@@ -52,8 +52,7 @@ class SearchPillPage extends GetView<SearchController> {
   Widget _pills(int i) {
     return GestureDetector(
       onTap: (() {
-        // controller.getProhibit();
-        Get.to(() => DetailPillPage(), arguments: controller.pillsitems[i]);
+        controller.getDetail(controller.pillsitems[i]);
 
         //log('${controller.pillsitems[i].item_name}');
       }),
@@ -172,15 +171,17 @@ class SearchPillPage extends GetView<SearchController> {
     //     physics: ClampingScrollPhysics(),
     //     scrollDirection: Axis.vertical,
     // child:
-    return ScrollConfiguration(
-      behavior: const ScrollBehavior().copyWith(overscroll: false),
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return _pills(index);
-        },
-        itemCount: controller.resultNum.value,
-      ),
-    );
+    return (controller.resultNum.value != -1)
+        ? ScrollConfiguration(
+            behavior: const ScrollBehavior().copyWith(overscroll: false),
+            child: ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return _pills(index);
+              },
+              itemCount: controller.resultNum.value,
+            ),
+          )
+        : Container();
   }
 
   @override
@@ -196,10 +197,12 @@ class SearchPillPage extends GetView<SearchController> {
                 SizedBox(
                   height: 7,
                 ),
-                Text(
-                  '결과 ${controller.resultNum}개',
-                  style: TextStyle(fontSize: 14),
-                ),
+                (controller.resultNum.value != -1)
+                    ? Text(
+                        '결과 ${controller.resultNum}개',
+                        style: TextStyle(fontSize: 14),
+                      )
+                    : Container(),
                 const SizedBox(
                   height: 15,
                 ),

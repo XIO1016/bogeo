@@ -3,10 +3,10 @@ import 'package:capstone/src/pages/mainhome.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controller/addpill_controller.dart';
+import '../../controller/add/addpill_controller.dart';
 
-class AddPill extends GetView<AddPillController> {
-  const AddPill({super.key});
+class AddPillwithCamera extends GetView<AddPillwithCameraController> {
+  const AddPillwithCamera({super.key});
 
   @override
   Widget build(BuildContext context) {
