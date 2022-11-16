@@ -11,7 +11,8 @@ class MyPillsItem {
   bool hasEndDay;
   String endDay;
   dynamic period;
-
+  String image;
+  int medicineID;
   MyPillsItem(
       {required this.item_seq,
       required this.item_name,
@@ -21,7 +22,9 @@ class MyPillsItem {
       required this.eatingNum,
       required this.endDay,
       required this.hasEndDay,
-      required this.period});
+      required this.period,
+      required this.image,
+      required this.medicineID});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

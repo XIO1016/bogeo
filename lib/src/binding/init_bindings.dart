@@ -3,7 +3,7 @@ import 'package:capstone/src/controller/eatpillController.dart';
 import 'package:capstone/src/controller/login/login_button_controller.dart';
 import 'package:get/get.dart';
 
-import '../controller/add/addpill_controller.dart';
+import '../controller/add/addPillWithCameraController.dart';
 import '../controller/add/addpilltodatacontroller.dart';
 import '../controller/detailPillController.dart';
 import '../controller/login/signup_button_controller.dart';

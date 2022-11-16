@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:capstone/src/components/message_popup2.dart';
-import 'package:capstone/src/pages/signup.dart';
+import 'package:capstone/src/pages/login/signup.dart';
 
 import '../../http/url.dart';
 import 'package:capstone/src/http/url.dart';

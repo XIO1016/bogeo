@@ -181,7 +181,15 @@ class DetailPillPage extends GetView<DetailPillController> {
                               children: [
                                 Text1('효능 효과', Color(0xffBababa)),
                                 Sbox(0, 5),
-                                Text1(pillsitem.effect, Color(0xff505050))
+                                Text(
+                                  pillsitem.effect,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(
+                                        0xff505050,
+                                      ),
+                                      height: 1.5),
+                                )
                               ],
                             ),
                             const SizedBox(
@@ -194,8 +202,10 @@ class DetailPillPage extends GetView<DetailPillController> {
                                 Sbox(0, 5),
                                 Text(pillsitem.ingredient,
                                     style: TextStyle(
-                                        color: Color(0xff505050),
                                         fontSize: 16,
+                                        color: Color(
+                                          0xff505050,
+                                        ),
                                         height: 1.5))
                               ],
                             ),
@@ -230,10 +240,11 @@ class DetailPillPage extends GetView<DetailPillController> {
                         Column(
                           children: [
                             const SizedBox(
-                              height: 30,
+                              height: 10,
                             ),
                             Text(pillsitem.warning,
-                                style: TextStyle(
+                                style: const TextStyle(
+                                    fontSize: 16,
                                     color: Color(
                                       0xff505050,
                                     ),
@@ -248,9 +259,17 @@ class DetailPillPage extends GetView<DetailPillController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(
-                              height: 30,
+                              height: 10,
                             ),
-                            Text1(pillsitem.dosage, Color(0xff505050)),
+                            Text(
+                              pillsitem.dosage,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color(
+                                    0xff505050,
+                                  ),
+                                  height: 1.5),
+                            ),
                             const SizedBox(
                               height: 80,
                             ),

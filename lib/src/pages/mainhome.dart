@@ -67,7 +67,7 @@ class MainHome extends GetView<MainHomeController> {
             ((j) => Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
+                      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                       width: Get.width,
                       decoration: BoxDecoration(
                           border: Border.all(width: 0.2, color: blackcolor),
@@ -106,13 +106,19 @@ class MainHome extends GetView<MainHomeController> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                width: 126,
-                                height: 68,
-                                color: Colors.grey,
-                              ),
+                              (pillsdata[j].image == '')
+                                  ? Container(
+                                      width: 126,
+                                      height: 75,
+                                      color: Color.fromARGB(255, 179, 179, 179),
+                                      child: Center(child: Text('사진 없음')),
+                                    )
+                                  : SizedBox(
+                                      width: 126,
+                                      height: 75,
+                                      child: Image.network(pillsdata[j].image)),
                               const SizedBox(
-                                width: 20,
+                                width: 10,
                               ),
                               SizedBox(
                                 width: Get.width - 250,

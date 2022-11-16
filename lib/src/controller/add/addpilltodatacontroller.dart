@@ -17,6 +17,7 @@ class AddPillToDataController extends GetxController {
   static AddPillToDataController get to => Get.find<AddPillToDataController>();
   var id = LoginButtonController.to.id;
   RxString token1 = LoginButtonController.to.token1;
+
   RxInt eatPeriod = 0.obs;
   List week = ['월', '화', '수', '목', '금', '토', '일'];
   TextEditingController interval = TextEditingController();
@@ -112,7 +113,7 @@ class AddPillToDataController extends GetxController {
     }
 
     var request = await http.post(
-        Uri.parse(urlBase + 'medicine?id=$id&seq=${pill.item_seq}'),
+        Uri.parse('${urlBase}medicine?id=$id&seq=${pill.item_seq}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           // ignore: prefer_interpolation_to_compose_strings
@@ -135,23 +136,8 @@ class AddPillToDataController extends GetxController {
 
     if (request.statusCode == 200) {
       Get.to(App());
+      LoginButtonController.to.getMyPills();
     }
-    // log(request.body.toString());
-    // log(request.statusCode.toString());
-    // log({
-    //   'medicineSeq': pill.item_seq,
-    //   'periodType': eatPeriod.value,
-    //   'period': period,
-    //   'hasEndDay': (eatEnding == 0) ? false : true,
-    //   'endDay': (eatEnding == 1)
-    //       ? '${selectedDate.value.year}-${selectedDate.value.month}-${selectedDate.value.day}'
-    //       : null,
-    //   'hasMedicineTime': hasmedicinetime.value,
-    //   'medicineHour': time,
-    //   'medicineMinute':
-    //       (hasmedicinetime.value) ? int.parse(timeminute.text) : -1,
-    //   'dosage': int.parse(pillNum.text)
-    // }.toString());
   }
 
   backButton() {

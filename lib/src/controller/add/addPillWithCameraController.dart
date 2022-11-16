@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:camera/camera.dart';
 import 'package:capstone/src/http/url.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -13,7 +12,7 @@ class AddPillwithCameraController extends GetxController {
   RxBool cameraInitialized = false.obs;
   var pickedFile;
   late File image;
-  String imagePath = '';
+  RxString imagePath = ''.obs;
   final _picker = ImagePicker();
   RxString parsedtext = ''.obs;
 
@@ -41,9 +40,9 @@ class AddPillwithCameraController extends GetxController {
     if (pickedFile != null) {
       image = File(pickedFile.path);
       imagePath = pickedFile.path;
-      PostOcrApi(imagePath);
+      PostOcrApi(imagePath.value);
 
-      log(imagePath);
+      log(imagePath.value);
       update();
     } else {
       print('No image selected.');

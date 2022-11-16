@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../pages/signup.dart';
+import '../../pages/login/signup.dart';
 
 class LoginComponent extends StatelessWidget {
   int id;

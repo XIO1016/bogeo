@@ -1,9 +1,11 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:capstone/src/pages/mainhome.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../controller/add/addpill_controller.dart';
+import '../../controller/add/addPillWithCameraController.dart';
+import 'package:cross_file_image/cross_file_image.dart';
 
 class AddPillwithCamera extends GetView<AddPillwithCameraController> {
   const AddPillwithCamera({super.key});
@@ -11,26 +13,40 @@ class AddPillwithCamera extends GetView<AddPillwithCameraController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          elevation: 0,
-          backgroundColor: MainHome.maincolor,
-          centerTitle: true,
-          title: const Text(
-            '처방전/약봉투 촬영',
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Sans',
-                fontSize: 18,
-                fontWeight: FontWeight.w500),
-          )),
-      body: Column(children: [
-        SizedBox(
-            width: Get.width,
-            height: 600,
-            child: CameraPreview(controller.cameraController)),
-      ]),
+      body: SafeArea(
+        child: Column(children: [
+          Container(
+            height: 80,
+            color: Colors.white,
+            child: Center(
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                      onPressed: () => Get.back(),
+                      icon: Icon(Icons.arrow_back_ios)),
+                  Text(
+                    '촬영',
+                    style: TextStyle(
+                        color: MainHome.blackcolor,
+                        fontFamily: 'Sans',
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+              width: Get.width,
+              height: 600,
+              child: CameraPreview(controller.cameraController)),
+        ]),
+      ),
       bottomSheet: Container(
-        color: MainHome.maincolor,
+        color: Colors.white,
         height: Get.height - 690,
         width: Get.width,
         child: Row(
@@ -39,23 +55,28 @@ class AddPillwithCamera extends GetView<AddPillwithCameraController> {
             IconButton(
               icon: Icon(
                 Icons.wallpaper,
-                color: Colors.white,
+                color: MainHome.blackcolor,
                 size: 30,
               ),
               onPressed: () async {
                 controller.getImageFromGallery();
-                if (controller.imagePath != '') {
-                  showImage();
-                }
+                // if (controller.imagePath != '') {
+                //   showImage();
+                // }
               },
             ),
             Center(
               child: Container(
-                color: MainHome.maincolor,
+                color: Colors.white,
                 child: IconButton(
-                  onPressed: (() {}),
+                  onPressed: (() async {
+                    XFile file =
+                        await controller.cameraController.takePicture();
+
+                    showImage(file);
+                  }),
                   icon: Icon(
-                    color: Colors.white,
+                    color: MainHome.blackcolor,
                     Icons.camera,
                     size: 35,
                   ),
@@ -75,13 +96,11 @@ class AddPillwithCamera extends GetView<AddPillwithCameraController> {
     controller.getImageFromGallery();
   }
 
-  Future<bool> showImage() async {
+  Future<bool> showImage(XFile xfile) async {
     showDialog(
         context: Get.context!,
         builder: (context) => AlertDialog(
-              content: Image(
-                image: FileImage(controller.image),
-              ),
+              content: Image(image: XFileImage(xfile)),
               actions: [
                 TextButton(
                     onPressed: () {

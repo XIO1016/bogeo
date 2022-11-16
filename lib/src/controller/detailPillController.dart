@@ -12,9 +12,9 @@ class DetailPillController extends GetxController
   RxInt index = 0.obs;
   late TabController tabController;
   final tabs = [
-    Tab(child: const Text('기본 정보')),
-    Tab(child: const Text('주의 사항')),
-    Tab(child: const Text('복용 방법')),
+    const Tab(child: Text('기본 정보')),
+    const Tab(child: Text('주의 사항')),
+    const Tab(child: Text('복용 방법')),
   ];
 
   @override

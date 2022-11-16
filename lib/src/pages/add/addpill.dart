@@ -44,7 +44,10 @@ class addpillPage extends StatelessWidget {
                 child: _list('처방전으로', 'tabler_clipboard-plus')),
             Sbox(0, 20),
             GestureDetector(
-                onTap: () {}, child: _list('약 사진으로', 'tabler_pill')),
+                onTap: () {
+                  Get.to(AddPillwithCamera());
+                },
+                child: _list('약 사진으로', 'tabler_pill')),
             Sbox(0, 20),
             GestureDetector(
                 onTap: () => Get.to(SearchPillPage()),

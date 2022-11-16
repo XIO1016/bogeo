@@ -214,9 +214,6 @@ class LoginButtonController extends GetxController {
   }
 
   Future getMyPills() async {
-    log('token1');
-    log(token1.value);
-
     var todayyear = DateTime.now().year;
     var todaymonth = DateTime.now().month;
     var todayday = DateTime.now().day;
@@ -227,9 +224,7 @@ class LoginButtonController extends GetxController {
           'Content-Type': 'application/json; charset=UTF-8',
           // ignore: prefer_interpolation_to_compose_strings
           'Authorization': 'Bearer ' + token1.value,
-          'refreshToken': 'Bearer ' + token2.value
         });
-    log(getMedicineRequest.body);
     if (getMedicineRequest.statusCode == 200) {
       List<dynamic> pillslist = jsonDecode(getMedicineRequest.body);
       pillNum(pillslist.length);
@@ -237,25 +232,31 @@ class LoginButtonController extends GetxController {
         int eatingTime3 = 2; //오전 오후
         Map pilllist = pillslist[i];
         var pillsitem;
+        int eatingTime;
 
         if (pilllist['hasMedicineTime']) {
           var time = pilllist['medicineTime'].split(':');
           if (int.parse(time[0]) >= 12) {
             eatingTime3 = 1;
+            eatingTime = int.parse(time[0]) - 12;
           } else {
             eatingTime3 = 0;
+            eatingTime = int.parse(time[0]);
           }
           pillsitem = MyPillsItem(
-            item_seq: pilllist['medicineSeq'],
-            item_name: pilllist['medicineName'],
-            eatingNum: pilllist['dosage'],
-            eatingTime: int.parse(time[0]),
-            eatingTime3: eatingTime3,
-            endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
-            hasEndDay: pilllist['hasEndDay'],
-            iseat: pilllist['activated'],
-            period: pilllist['period'],
-          );
+              item_seq: pilllist['medicineSeq'],
+              item_name: pilllist['medicineName'],
+              eatingNum: pilllist['dosage'],
+              eatingTime: eatingTime,
+              eatingTime3: eatingTime3,
+              endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
+              hasEndDay: pilllist['hasEndDay'],
+              iseat: pilllist['activated'],
+              period: pilllist['period'],
+              image: (pilllist['medicineImage'] == null)
+                  ? ''
+                  : pilllist['medicineImage'],
+              medicineID: pilllist['medicineId']);
           if (int.parse(time[0]) <= 9) {
             pillsdata[0].add(pillsitem);
           } else if (9 < int.parse(time[0]) && int.parse(time[0]) <= 17) {
@@ -265,16 +266,19 @@ class LoginButtonController extends GetxController {
           }
         } else {
           pillsitem = MyPillsItem(
-            item_seq: pilllist['medicineSeq'],
-            item_name: pilllist['medicineName'],
-            eatingNum: pilllist['dosage'],
-            eatingTime: 0,
-            eatingTime3: eatingTime3,
-            endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
-            hasEndDay: pilllist['hasEndDay'],
-            iseat: pilllist['activated'],
-            period: pilllist['period'],
-          );
+              item_seq: pilllist['medicineSeq'],
+              item_name: pilllist['medicineName'],
+              eatingNum: pilllist['dosage'],
+              eatingTime: 0,
+              eatingTime3: eatingTime3,
+              endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
+              hasEndDay: pilllist['hasEndDay'],
+              iseat: pilllist['activated'],
+              period: pilllist['period'],
+              image: (pilllist['medicineImage'] == null)
+                  ? ''
+                  : pilllist['medicineImage'],
+              medicineID: pilllist['medicineId']);
           pillsdata[3].add(pillsitem);
         }
       }
