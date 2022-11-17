@@ -214,6 +214,7 @@ class LoginButtonController extends GetxController {
   }
 
   Future getMyPills() async {
+    pillsdata([[], [], [], []]);
     var todayyear = DateTime.now().year;
     var todaymonth = DateTime.now().month;
     var todayday = DateTime.now().day;

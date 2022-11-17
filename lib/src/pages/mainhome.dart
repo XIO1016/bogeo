@@ -66,136 +66,144 @@ class MainHome extends GetView<MainHomeController> {
             pillsdata.length,
             ((j) => Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      width: Get.width,
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 0.2, color: blackcolor),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              (i < 3)
-                                  ? Text(
-                                      '${time1[pillsdata[j].eatingTime3]} ${pillsdata[j].eatingTime}시에 드세요',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(
-                                            0xff628EFF,
-                                          )),
-                                    )
-                                  : const SizedBox(
-                                      width: 150,
-                                      height: 23,
-                                    ),
-                              Text(
-                                '${pillsdata[j].eatingNum}정',
-                                style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color(0xff505050)),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              (pillsdata[j].image == '')
-                                  ? Container(
-                                      width: 126,
-                                      height: 75,
-                                      color: Color.fromARGB(255, 179, 179, 179),
-                                      child: Center(child: Text('사진 없음')),
-                                    )
-                                  : SizedBox(
-                                      width: 126,
-                                      height: 75,
-                                      child: Image.network(pillsdata[j].image)),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SizedBox(
-                                width: Get.width - 250,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      text: TextSpan(
-                                        text: pillsdata[j].item_name,
+                    GestureDetector(
+                      onLongPress: () {
+                        controller.deleteMedicine(pillsdata[j], i, j);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        width: Get.width,
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 0.2, color: blackcolor),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                (i < 3)
+                                    ? Text(
+                                        '${time1[pillsdata[j].eatingTime3]} ${pillsdata[j].eatingTime}시에 드세요',
                                         style: const TextStyle(
-                                            color: Color(0xff505050),
-                                            fontSize: 20),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(
+                                              0xff628EFF,
+                                            )),
+                                      )
+                                    : const SizedBox(
+                                        width: 150,
+                                        height: 23,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 17,
-                                    ),
-                                    (pillsdata[j].iseat == false)
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              controller.checkeating(i, j);
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                const Text(
-                                                  '안먹음',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color(0xffBABABA)),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                SvgPicture.asset(
-                                                    'assets/icons/noeat.svg')
-                                              ],
-                                            ),
-                                          )
-                                        : GestureDetector(
-                                            onTap: () {
-                                              controller.checkeating(i, j);
-                                              log("i=$i,j=$j");
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  '먹음',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: maincolor),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                SvgPicture.asset(
-                                                    'assets/icons/eat.svg')
-                                              ],
-                                            ),
-                                          )
-                                  ],
+                                Text(
+                                  '${pillsdata[j].eatingNum}정',
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                      color: Color(0xff505050)),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                (pillsdata[j].image == '')
+                                    ? Container(
+                                        width: 126,
+                                        height: 75,
+                                        color:
+                                            Color.fromARGB(255, 179, 179, 179),
+                                        child: Center(child: Text('사진 없음')),
+                                      )
+                                    : SizedBox(
+                                        width: 126,
+                                        height: 75,
+                                        child:
+                                            Image.network(pillsdata[j].image)),
+                                const SizedBox(
+                                  width: 10,
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                                SizedBox(
+                                  width: Get.width - 250,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        text: TextSpan(
+                                          text: pillsdata[j].item_name,
+                                          style: const TextStyle(
+                                              color: Color(0xff505050),
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 17,
+                                      ),
+                                      (pillsdata[j].iseat == false)
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                controller.checkeating(i, j);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  const Text(
+                                                    '안먹음',
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Color(0xffBABABA)),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  SvgPicture.asset(
+                                                      'assets/icons/noeat.svg')
+                                                ],
+                                              ),
+                                            )
+                                          : GestureDetector(
+                                              onTap: () {
+                                                controller.checkeating(i, j);
+                                                log("i=$i,j=$j");
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    '먹음',
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: maincolor),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  SvgPicture.asset(
+                                                      'assets/icons/eat.svg')
+                                                ],
+                                              ),
+                                            )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(

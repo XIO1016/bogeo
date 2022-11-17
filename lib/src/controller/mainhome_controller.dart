@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:capstone/src/components/image_data.dart';
+import 'package:capstone/src/components/message_popup.dart';
 import 'package:capstone/src/model/mypills.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -114,5 +115,32 @@ class MainHomeController extends GetxController
       // ignore: prefer_interpolation_to_compose_strings
       'Authorization': 'Bearer ' + token1.value,
     });
+  }
+
+  deleteMedicine(MyPillsItem item, int i, int j) {
+    showDialog(
+        context: Get.context!,
+        builder: (context) => MessagePopup(
+            title: '약 삭제',
+            message: '${item.item_name}을 삭제하시겠습니까?',
+            cancelCallback: () => Get.back(),
+            okCallback: (() async {
+              log('deleting');
+
+              Get.dialog(Center(child: CircularProgressIndicator()),
+                  barrierDismissible: false);
+              await http.delete(
+                  Uri.parse('${urlBase}medicine?id=${item.medicineID}'),
+                  headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    // ignore: prefer_interpolation_to_compose_strings
+                    'Authorization': 'Bearer ' + token1.value,
+                  });
+              pillsdata[i].remove(item);
+
+              pillsdata.refresh();
+              Get.back();
+              Get.back();
+            })));
   }
 }

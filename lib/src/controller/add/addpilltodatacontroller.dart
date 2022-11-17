@@ -69,6 +69,7 @@ class AddPillToDataController extends GetxController {
 
   changePage() {
     if (pageIndex < 3) {
+      pillNum.text = '';
       pageIndex.value++;
     }
     if (pageIndex == 3 && pillNum.text != '') {
@@ -136,6 +137,7 @@ class AddPillToDataController extends GetxController {
 
     if (request.statusCode == 200) {
       Get.to(App());
+
       LoginButtonController.to.getMyPills();
     }
   }

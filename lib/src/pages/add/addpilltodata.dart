@@ -19,7 +19,9 @@ class AddPillToData extends GetView<AddPillToDataController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.pageIndex(Get.arguments[0]);
+    Future.delayed(Duration.zero, () {
+      controller.pageIndex(Get.arguments[0]);
+    });
     controller.pill = pill;
     return Obx(
       () => Scaffold(
@@ -371,7 +373,8 @@ class AddPillToData extends GetView<AddPillToDataController> {
                                                       border: Border.all(
                                                           color: Colors.black),
                                                       borderRadius:
-                                                          BorderRadius.only(
+                                                          const BorderRadius
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius

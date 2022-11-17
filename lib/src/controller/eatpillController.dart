@@ -31,15 +31,22 @@ class eatpillController extends GetxController {
     }
   }
 
-  checkeating(List a, int j) {
-    final item = a[j];
-    log(item.toString());
+  checkeating(MyPillsItem item) async {
     if (item.iseat == false) {
       item.iseat = true;
     } else {
       item.iseat = false;
     }
-    pillsdata.refresh();
+    pillItems.refresh();
+    pillItemsOtherDay.refresh();
+
+    log(item.iseat.toString());
+    await http
+        .patch(Uri.parse('${urlBase}medicine?id=${item.medicineID}'), headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      // ignore: prefer_interpolation_to_compose_strings
+      'Authorization': 'Bearer ' + token1.value,
+    });
   }
 
   Future<void> getDayMedicine() async {

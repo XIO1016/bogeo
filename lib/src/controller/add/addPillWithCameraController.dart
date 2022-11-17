@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:capstone/src/http/url.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http_parser/http_parser.dart';
 
 class AddPillwithCameraController extends GetxController {
   late CameraController cameraController;
@@ -15,6 +16,8 @@ class AddPillwithCameraController extends GetxController {
   RxString imagePath = ''.obs;
   final _picker = ImagePicker();
   RxString parsedtext = ''.obs;
+  RxString firstimage = ''.obs;
+  RxString secondimage = ''.obs;
 
   @override
   void onInit() {
@@ -86,4 +89,25 @@ class AddPillwithCameraController extends GetxController {
     print(parsedtext);
     log(parsedtext.toString());
   }
+
+  // postPillImage() async {
+//  var formData = FormData.fromMap({
+//             'file' : await MultipartFile.fromFile(filePath!)
+//         });
+
+//     http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse(url));
+
+//   request.files.add(
+//     await http.MultipartFile.fromPath(
+//       'images',
+//       File(firstimage.value).path,
+
+//       contentType: MediaType('application', 'jpeg'),
+//     ),
+//   );+
+
+//   http.StreamedResponse r = await request.send();
+//   print(r.statusCode);
+//   print(await r.stream.transform(utf8.decoder).join())
+//   }
 }
