@@ -200,201 +200,204 @@ class EatPillPage extends GetView<eatpillController> {
           controller.pillsdata[3]);
     });
     var pillsdata = controller.pillItems;
-    return (pillsdata.isEmpty)
-        ? [
-            SizedBox(
-              width: Get.width,
-              height: 150,
-              child: Center(
-                child: Text(
-                  '먹을 약이 없어요!',
-                  style: TextStyle(
-                      color: MainHome.blackcolor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
+    if ((pillsdata.isEmpty)) {
+      return [
+        SizedBox(
+          width: Get.width,
+          height: 150,
+          child: Center(
+            child: Text(
+              '먹을 약이 없어요!',
+              style: TextStyle(
+                  color: MainHome.blackcolor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
-            const SizedBox(
-              height: 50,
-            )
-          ]
-        : List.generate(
-            pillsdata.length,
-            ((j) => (pillsdata[j].iseat != x)
-                ? Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                        width: Get.width,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 0.2, color: MainHome.blackcolor),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                (pillsdata[j].eatingTime != 0)
-                                    ? Text(
-                                        '${time1[pillsdata[j].eatingTime3]} ${pillsdata[j].eatingTime}시에 드세요',
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(
-                                              0xff628EFF,
-                                            )),
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 170,
-                                      child: RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        text: TextSpan(
-                                          text: pillsdata[j].item_name,
-                                          style: const TextStyle(
-                                              color: Color(0xff505050),
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      '${pillsdata[j].eatingNum}정',
+          ),
+        ),
+        const SizedBox(
+          height: 50,
+        )
+      ];
+    } else {
+      return List.generate(
+        pillsdata.length,
+        ((j) => (pillsdata[j].iseat != x)
+            ? Column(
+                children: [
+                  GestureDetector(
+                    onLongPress: () =>
+                        controller.deleteMedicine(pillsdata[j], j),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                      width: Get.width,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 0.2, color: MainHome.blackcolor),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              (pillsdata[j].eatingTime != 0)
+                                  ? Text(
+                                      '${time1[pillsdata[j].eatingTime3]} ${pillsdata[j].eatingTime}시에 드세요',
                                       style: const TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                          color: Color(0xff505050)),
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(
+                                            0xff628EFF,
+                                          )),
                                     )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 170,
+                                    child: RichText(
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      text: TextSpan(
+                                        text: pillsdata[j].item_name,
+                                        style: const TextStyle(
+                                            color: Color(0xff505050),
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${pillsdata[j].eatingNum}정',
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xff505050)),
+                                  )
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  controller.getDetail(pillsdata[j]);
+                                },
+                                child: const Text(
+                                  '약 정보 보기 >',
+                                  style: TextStyle(
+                                      color: Color(0xffE4E4E4),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              (pillsdata[j].image == '')
+                                  ? Container(
+                                      width: 126,
+                                      height: 68,
+                                      color: Color.fromARGB(255, 179, 179, 179),
+                                      child: Center(child: Text('사진 없음')),
+                                    )
+                                  : SizedBox(
+                                      width: 126,
+                                      height: 68,
+                                      child: Image.network(pillsdata[j].image)),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              SizedBox(
+                                width: Get.width - 250,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    const SizedBox(
+                                      height: 17,
+                                    ),
+                                    (pillsdata[j].iseat == false)
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              controller
+                                                  .checkeating(pillsdata[j]);
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                const Text(
+                                                  '안먹음',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Color(0xffBABABA)),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/icons/noeat.svg')
+                                              ],
+                                            ),
+                                          )
+                                        : GestureDetector(
+                                            onTap: () {
+                                              controller
+                                                  .checkeating(pillsdata[j]);
+                                              log("i=$pillsdata,j=$j");
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  '먹음',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color:
+                                                          MainHome.maincolor),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/icons/eat.svg')
+                                              ],
+                                            ),
+                                          )
                                   ],
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.getDetail(pillsdata[j]);
-                                  },
-                                  child: const Text(
-                                    '약 정보 보기 >',
-                                    style: TextStyle(
-                                        color: Color(0xffE4E4E4),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                (pillsdata[j].image == '')
-                                    ? Container(
-                                        width: 126,
-                                        height: 68,
-                                        color:
-                                            Color.fromARGB(255, 179, 179, 179),
-                                        child: Center(child: Text('사진 없음')),
-                                      )
-                                    : SizedBox(
-                                        width: 126,
-                                        height: 68,
-                                        child:
-                                            Image.network(pillsdata[j].image)),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                SizedBox(
-                                  width: Get.width - 250,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      const SizedBox(
-                                        height: 17,
-                                      ),
-                                      (pillsdata[j].iseat == false)
-                                          ? GestureDetector(
-                                              onTap: () {
-                                                controller
-                                                    .checkeating(pillsdata[j]);
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  const Text(
-                                                    '안먹음',
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            Color(0xffBABABA)),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  SvgPicture.asset(
-                                                      'assets/icons/noeat.svg')
-                                                ],
-                                              ),
-                                            )
-                                          : GestureDetector(
-                                              onTap: () {
-                                                controller
-                                                    .checkeating(pillsdata[j]);
-                                                log("i=$pillsdata,j=$j");
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    '먹음',
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            MainHome.maincolor),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  SvgPicture.asset(
-                                                      'assets/icons/eat.svg')
-                                                ],
-                                              ),
-                                            )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                      const SizedBox(
-                        height: 30,
-                      )
-                    ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
                   )
-                : SizedBox()),
-          );
+                ],
+              )
+            : SizedBox()),
+      );
+    }
   }
 
   List<Widget> PillWidgetListOther(bool x) {
@@ -423,149 +426,156 @@ class EatPillPage extends GetView<eatpillController> {
             ((j) => (pillsdata[j].iseat != x)
                 ? Column(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                        width: Get.width,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 0.2, color: MainHome.blackcolor),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 170,
-                                      child: RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        text: TextSpan(
-                                          text: pillsdata[j].item_name,
-                                          style: const TextStyle(
-                                              color: Color(0xff505050),
-                                              fontSize: 20),
+                      GestureDetector(
+                        onLongPress: () =>
+                            controller.deleteMedicine(pillsdata[j], j),
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 0.2, color: MainHome.blackcolor),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 170,
+                                        child: RichText(
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          text: TextSpan(
+                                            text: pillsdata[j].item_name,
+                                            style: const TextStyle(
+                                                color: Color(0xff505050),
+                                                fontSize: 20),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Text(
-                                      '${pillsdata[j].eatingNum}정',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                          color: Color(0xff505050)),
-                                    )
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.getDetail(pillsdata[j]);
-                                  },
-                                  child: const Text(
-                                    '약 정보 보기 >',
-                                    style: TextStyle(
-                                        color: Color(0xffE4E4E4),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                (pillsdata[j].image == '')
-                                    ? Container(
-                                        width: 126,
-                                        height: 68,
-                                        color:
-                                            Color.fromARGB(255, 179, 179, 179),
-                                        child: Center(child: Text('사진 없음')),
+                                      Text(
+                                        '${pillsdata[j].eatingNum}정',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color: Color(0xff505050)),
                                       )
-                                    : SizedBox(
-                                        width: 126,
-                                        height: 68,
-                                        child:
-                                            Image.network(pillsdata[j].image)),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                SizedBox(
-                                  width: Get.width - 250,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      const SizedBox(
-                                        height: 17,
-                                      ),
-                                      (pillsdata[j].iseat == false)
-                                          ? GestureDetector(
-                                              onTap: () {
-                                                controller
-                                                    .checkeating(pillsdata[j]);
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  const Text(
-                                                    '안먹음',
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            Color(0xffBABABA)),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  SvgPicture.asset(
-                                                      'assets/icons/noeat.svg')
-                                                ],
-                                              ),
-                                            )
-                                          : GestureDetector(
-                                              onTap: () {
-                                                controller
-                                                    .checkeating(pillsdata[j]);
-                                                log("i=$pillsdata,j=$j");
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    '먹음',
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            MainHome.maincolor),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  SvgPicture.asset(
-                                                      'assets/icons/eat.svg')
-                                                ],
-                                              ),
-                                            )
                                     ],
                                   ),
-                                ),
-                              ],
-                            )
-                          ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.getDetail(pillsdata[j]);
+                                    },
+                                    child: const Text(
+                                      '약 정보 보기 >',
+                                      style: TextStyle(
+                                          color: Color(0xffE4E4E4),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  (pillsdata[j].image == '')
+                                      ? Container(
+                                          width: 126,
+                                          height: 68,
+                                          color: Color.fromARGB(
+                                              255, 179, 179, 179),
+                                          child: Center(child: Text('사진 없음')),
+                                        )
+                                      : SizedBox(
+                                          width: 126,
+                                          height: 68,
+                                          child: Image.network(
+                                              pillsdata[j].image)),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  SizedBox(
+                                    width: Get.width - 250,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        const SizedBox(
+                                          height: 17,
+                                        ),
+                                        (pillsdata[j].iseat == false)
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  controller.checkeating(
+                                                      pillsdata[j]);
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    const Text(
+                                                      '안먹음',
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Color(
+                                                              0xffBABABA)),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    SvgPicture.asset(
+                                                        'assets/icons/noeat.svg')
+                                                  ],
+                                                ),
+                                              )
+                                            : GestureDetector(
+                                                onTap: () {
+                                                  controller.checkeating(
+                                                      pillsdata[j]);
+                                                  log("i=$pillsdata,j=$j");
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      '먹음',
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: MainHome
+                                                              .maincolor),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    SvgPicture.asset(
+                                                        'assets/icons/eat.svg')
+                                                  ],
+                                                ),
+                                              )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(

@@ -16,6 +16,7 @@ class InitBinding extends Bindings {
   void dependencies() {
     Get.put(BottomNavController(), permanent: true);
     Get.put(LoginButtonController(), permanent: true);
+
     Get.put(SignUpButtonController(), permanent: true);
     Get.put(MainHomeController(), permanent: true);
     Get.put(UserController(), permanent: true);

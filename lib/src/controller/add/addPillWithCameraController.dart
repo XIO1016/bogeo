@@ -1,14 +1,22 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:capstone/src/pages/searchpill.dart';
+import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:camera/camera.dart';
 import 'package:capstone/src/http/url.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
-class AddPillwithCameraController extends GetxController {
+class AddPillwithCameraController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  static AddPillwithCameraController get to =>
+      Get.find<AddPillwithCameraController>();
+  late AnimationController _animationController;
   late CameraController cameraController;
   RxBool cameraInitialized = false.obs;
   var pickedFile;
@@ -18,12 +26,22 @@ class AddPillwithCameraController extends GetxController {
   RxString parsedtext = ''.obs;
   RxString firstimage = ''.obs;
   RxString secondimage = ''.obs;
-
+  RxString result = ''.obs;
+  // late double percentage;
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     readyToCamera();
+    // _animationController = AnimationController(
+    //   vsync: this,
+    //   duration: Duration(seconds: 10),
+    // );
+    // _animationController.addListener(
+    //   () => refresh(),
+    // );
+    // _animationController.repeat();
+    // percentage = _animationController.value * 100;
   }
 
   @override
@@ -32,6 +50,7 @@ class AddPillwithCameraController extends GetxController {
     if (cameraController != null) {
       cameraController.dispose();
     }
+    // _animationController.dispose();
     super.onClose();
   }
 
@@ -90,24 +109,71 @@ class AddPillwithCameraController extends GetxController {
     log(parsedtext.toString());
   }
 
-  // postPillImage() async {
-//  var formData = FormData.fromMap({
-//             'file' : await MultipartFile.fromFile(filePath!)
-//         });
+  postPillImage() async {
+    // showDialog(
+    //   context: Get.context!,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return Dialog(
+    //         backgroundColor: Colors.transparent,
+    //         child: SizedBox(
+    //           height: 80,
+    //           width: 80,
+    //           child: LiquidCircularProgressIndicator(
+    //             value: _animationController.value,
+    //             backgroundColor: Colors.white,
+    //             valueColor: AlwaysStoppedAnimation(Colors.blue),
+    //             center: Text(
+    //               "${percentage.toStringAsFixed(0)}%",
+    //               style: TextStyle(
+    //                 color: Colors.lightBlueAccent,
+    //                 fontSize: 20.0,
+    //                 fontWeight: FontWeight.bold,
+    //               ),
+    //             ),
+    //           ),
+    //         ));
+    //   },
+    // );
 
-//     http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse(url));
+    Get.dialog(Center(child: CircularProgressIndicator()),
+        barrierDismissible: false);
+    List<File> imageFileList = [
+      File(firstimage.value),
+      File(secondimage.value)
+    ];
 
-//   request.files.add(
-//     await http.MultipartFile.fromPath(
-//       'images',
-//       File(firstimage.value).path,
+    var request = http.MultipartRequest("POST", Uri.parse(aiurl));
 
-//       contentType: MediaType('application', 'jpeg'),
-//     ),
-//   );+
+    for (var imageFile in imageFileList) {
+      request.files.add(
+          await http.MultipartFile.fromPath('imageFileList', imageFile.path));
+      log(request.files.toString());
+    }
+    try {
+      var response = await request.send();
+      log(response.request.toString());
 
-//   http.StreamedResponse r = await request.send();
-//   print(r.statusCode);
-//   print(await r.stream.transform(utf8.decoder).join())
-//   }
+      log(response.statusCode.toString());
+
+      try {
+        if (response.statusCode == 200) {
+          await response.stream.bytesToString().then((value) {
+            print(value);
+
+            result(json.decode(value)['result']);
+            Get.to(() => SearchPillPage(), arguments: true);
+          });
+        } else {
+          await response.stream.bytesToString().then((value) {
+            print(value);
+          });
+        }
+      } catch (e) {
+        log(e.toString());
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }

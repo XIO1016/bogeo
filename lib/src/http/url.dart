@@ -6,3 +6,4 @@ const ocrkey = 'K84136685388957';
 const ocrurl = 'https://api.ocr.space/parse/image';
 
 const pillurl = '${urlBase}search?name=';
+const aiurl = 'http://52.78.244.129:8080/ai/medicine';

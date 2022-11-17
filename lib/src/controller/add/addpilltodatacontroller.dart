@@ -139,6 +139,7 @@ class AddPillToDataController extends GetxController {
       Get.to(App());
 
       LoginButtonController.to.getMyPills();
+      LoginButtonController.to.getMyallPills();
     }
   }
 

@@ -5,10 +5,12 @@ import 'package:capstone/src/controller/login/login_button_controller.dart';
 import 'package:capstone/src/controller/mainhome_controller.dart';
 import 'package:capstone/src/controller/seachpill_controller.dart';
 import 'package:capstone/src/model/pillsdata.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 
+import '../components/message_popup.dart';
 import '../http/url.dart';
 import '../model/mypills.dart';
 
@@ -137,5 +139,32 @@ class eatpillController extends GetxController {
       combinationsnum: 0,
     );
     SearchController.to.getDetail(pillsitem);
+  }
+
+  deleteMedicine(MyPillsItem item, int j) {
+    showDialog(
+        context: Get.context!,
+        builder: (context) => MessagePopup(
+            title: '약 삭제',
+            message: '${item.item_name}을 삭제하시겠습니까?',
+            cancelCallback: () => Get.back(),
+            okCallback: (() async {
+              log('deleting');
+
+              Get.dialog(Center(child: CircularProgressIndicator()),
+                  barrierDismissible: false);
+              await http.delete(
+                  Uri.parse('${urlBase}medicine?id=${item.medicineID}'),
+                  headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    // ignore: prefer_interpolation_to_compose_strings
+                    'Authorization': 'Bearer ' + token1.value,
+                  });
+              pillItems.remove(item);
+
+              pillItems.refresh();
+              Get.back();
+              Get.back();
+            })));
   }
 }

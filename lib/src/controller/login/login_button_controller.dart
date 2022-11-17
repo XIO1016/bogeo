@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:capstone/network/dio_client.dart';
 import 'package:capstone/src/controller/mainhome_controller.dart';
+import 'package:capstone/src/model/myallpills.dart';
 import 'package:dio/dio.dart';
 
 import '../../components/message_popup2.dart';
@@ -28,6 +30,8 @@ class LoginButtonController extends GetxController {
   late TextEditingController passwordController;
   static final storage = FlutterSecureStorage();
   dynamic userInfo = '';
+  RxList myallpills = [].obs;
+  RxInt allPillNum = 0.obs;
 
   RxString id = "".obs;
   RxInt age = 0.obs;
@@ -58,16 +62,15 @@ class LoginButtonController extends GetxController {
       id(jsonDecode(userInfo)['user_id']);
       idController.text = id.toString();
       passwordController.text = jsonDecode(userInfo)['password'];
-      await apiLogin(1);
+      Timer(Duration(milliseconds: 500), () {
+        apiLogin(1);
+      });
     } else {
       print('로그인이 필요합니다');
     }
   }
 
   Future apiLogin(int i) async {
-    Get.dialog(Center(child: CircularProgressIndicator()),
-        barrierDismissible: false);
-
     var request = await http.post(Uri.parse(urlBase + urlLogin),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -81,21 +84,24 @@ class LoginButtonController extends GetxController {
       log('login----------');
       log(request.body);
       var val = jsonEncode(Login(passwordController.text, idController.text));
+
+      token1(jsonDecode(request.body)['accessToken']);
+
+      token2(jsonDecode(request.body)['refreshToken']);
+      id(idController.text);
       if (i == 0) {
         await storage.write(
           key: 'login',
           value: val,
         );
       }
-      token1(jsonDecode(request.body)['accessToken']);
-      token2(jsonDecode(request.body)['refreshToken']);
-      print(token1);
-      print(token2);
+      // print(token1);
+      // print(token2);
 
       _getProfile(token1.value, token2.value);
 
       await getMyPills();
-      Get.back();
+      await getMyallPills();
       Get.toNamed('App');
     } else {
       Map<String, dynamic> body = jsonDecode(request.body);
@@ -112,9 +118,6 @@ class LoginButtonController extends GetxController {
   }
 
   Future<void> _getProfile(String t1, String t2) async {
-    // log('++++++++++++++++++++++++token');
-    // log(token1.value);
-    // log(token2.value);
     var profileRequest =
         await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -142,6 +145,40 @@ class LoginButtonController extends GetxController {
       gender('여자');
     } else {
       gender('남자');
+    }
+  }
+
+  Future<void> getMyallPills() async {
+    myallpills([]);
+    var mypageRequest =
+        await http.get(Uri.parse('${urlBase}medicine/mypage?id=$id'), headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      // ignore: prefer_interpolation_to_compose_strings
+      'Authorization': 'Bearer ' + token1.value,
+    });
+    if (mypageRequest.statusCode == 401) {
+      print(mypageRequest.headers);
+
+      mypageRequest =
+          await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        // ignore: prefer_interpolation_to_compose_strings
+        'Authorization': 'Bearer ' + token1.value,
+        'refreshToken': 'Bearer ' + token2.value
+      });
+    }
+
+    List<dynamic> responsePills = jsonDecode(mypageRequest.body);
+    pillNum(responsePills.length);
+    for (int i = 0; i < responsePills.length; i++) {
+      var pill = responsePills[i];
+      var pillItem = MyAllPillsItem(
+          createdDate: pill['createdDate'],
+          medicineId: pill['medicineId'],
+          medicineName: pill['medicineName'],
+          medicineSeq: pill['medicineSeq'],
+          image: pill['medicineImage'] ??= '');
+      myallpills.add(pillItem);
     }
   }
 

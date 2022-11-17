@@ -26,9 +26,6 @@ class Login extends GetView<LoginButtonController> {
                         borderRadius: BorderRadius.circular(0.0))),
                 onPressed: (() {
                   if (controller.pageIndex.value == 1) {
-                    String id = controller.idController.text;
-                    String password = controller.passwordController.text;
-
                     controller.apiLogin(0);
                   } else {
                     controller.changeloginpage(controller.pageIndex.value + 1);

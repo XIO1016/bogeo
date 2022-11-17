@@ -1,9 +1,15 @@
 class MyAllPillsItem {
-  String day;
-  String item_name;
+  String createdDate;
+  String medicineName;
+  String medicineSeq;
+  int medicineId;
+  String image;
 
   MyAllPillsItem({
-    required this.day,
-    required this.item_name,
+    required this.createdDate,
+    required this.medicineId,
+    required this.medicineName,
+    required this.medicineSeq,
+    required this.image,
   });
 }

@@ -150,20 +150,36 @@ class SearchPillPage extends GetView<SearchController> {
   }
 
   Widget general2(i) {
-    return (controller.pillsitems[i].class_name == '')
-        ? Container()
-        : Container(
-            padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
-            decoration: BoxDecoration(
-                color: _color2[0], borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              controller.pillsitems[i].class_name,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xff6c6c6c)),
-            ),
-          );
+    if ((controller.pillsitems[i].class_name == '')) {
+      return Container();
+    } else {
+      return (controller.pillsitems[i].class_name.length < 13)
+          ? Container(
+              padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
+              decoration: BoxDecoration(
+                  color: _color2[0], borderRadius: BorderRadius.circular(10)),
+              child: Text(
+                controller.pillsitems[i].class_name,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                    color: Color(0xff6c6c6c)),
+              ),
+            )
+          : Container(
+              width: 175,
+              padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
+              decoration: BoxDecoration(
+                  color: _color2[0], borderRadius: BorderRadius.circular(10)),
+              child: Text(
+                controller.pillsitems[i].class_name,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                    color: Color(0xff6c6c6c)),
+              ),
+            );
+    }
   }
 
   Widget _body() {
@@ -186,6 +202,14 @@ class SearchPillPage extends GetView<SearchController> {
 
   @override
   Widget build(BuildContext context) {
+    if (Get.arguments != null) {
+      log('message');
+      Future.delayed(Duration.zero, () {
+        controller.searchTextEditingController.text =
+            controller.cameraPill.value;
+        controller.getPillsFromData();
+      });
+    }
     return Obx((() => Scaffold(
           body: SafeArea(
               child: Padding(

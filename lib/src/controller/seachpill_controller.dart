@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:capstone/src/controller/add/addPillWithCameraController.dart';
+import 'package:capstone/src/controller/add/addpilltodatacontroller.dart';
 import 'package:capstone/src/controller/login/login_button_controller.dart';
 
 import 'package:capstone/network/dio_client.dart';
@@ -22,6 +24,7 @@ class SearchController extends GetxController {
   RxString token1 = LoginButtonController.to.token1;
   var token2 = LoginButtonController.to.token2;
   var id = LoginButtonController.to.id;
+  RxString cameraPill = AddPillwithCameraController.to.result;
 
   RxBool prohibitExist = false.obs;
   @override

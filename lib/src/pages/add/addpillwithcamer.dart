@@ -16,7 +16,9 @@ class AddPillwithCamera extends GetView<AddPillwithCameraController> {
       bottomSheet: Padding(
         padding: const EdgeInsets.all(20.0),
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            controller.postPillImage();
+          },
           child: Container(
             width: Get.width,
             height: 60,

@@ -5,6 +5,7 @@ import 'package:capstone/src/pages/add/addpill.dart';
 import 'package:capstone/src/pages/add/addpilltodata.dart';
 import 'package:capstone/src/pages/eatpill.dart';
 import 'package:capstone/src/pages/login/login.dart';
+import 'package:capstone/src/pages/login/splashScreen.dart';
 import 'package:capstone/src/pages/mainhome.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => Login()),
+        GetPage(name: '/', page: () => splashScreen()),
+        GetPage(name: '/login', page: () => Login()),
         GetPage(name: '/App', page: () => const App()),
         GetPage(
           name: '/Home',
