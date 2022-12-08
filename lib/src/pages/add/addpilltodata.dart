@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:capstone/src/app.dart';
 import 'package:capstone/src/components/Sbox.dart';
 import 'package:capstone/src/model/pillsdata.dart';
 import 'package:capstone/src/pages/mainhome.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../components/text_component.dart';
@@ -21,6 +19,7 @@ class AddPillToData extends GetView<AddPillToDataController> {
   Widget build(BuildContext context) {
     Future.delayed(Duration.zero, () {
       controller.pageIndex(Get.arguments[0]);
+      controller.postType(Get.arguments[2]);
     });
     controller.pill = pill;
     return Obx(
@@ -31,11 +30,12 @@ class AddPillToData extends GetView<AddPillToDataController> {
         ),
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('약 추가하기'),
+          title: const Text('약 추가하기'),
           centerTitle: true,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.keyboard_arrow_left_rounded, color: Colors.black),
+            icon: const Icon(Icons.keyboard_arrow_left_rounded,
+                color: Colors.black),
             onPressed: () {
               controller.backButton();
             },
@@ -59,11 +59,7 @@ class AddPillToData extends GetView<AddPillToDataController> {
                               child: Text('이미지 없음'),
                             ),
                           )
-                        : Image.network(
-                            pill.image,
-                            width: 117,
-                            height: 65,
-                          ),
+                        : controller.validateImage(pill.image),
                     const SizedBox(
                       width: 20,
                     ),
@@ -532,7 +528,7 @@ class AddPillToData extends GetView<AddPillToDataController> {
                                   Sbox(10, 0),
                                 ])
                           : Container(),
-                      Sbox(0, 40),
+                      Sbox(0, 70),
                     ],
                   ),
                   Column(
@@ -728,6 +724,7 @@ class _calendarState extends State<calendar> {
   Rx<DateTime> selected = AddPillToDataController.to.selectedDate;
   DateTime? selectedDate;
   DateTime _focusedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return TableCalendar(

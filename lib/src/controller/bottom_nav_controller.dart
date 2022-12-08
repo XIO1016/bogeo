@@ -1,14 +1,21 @@
 import 'dart:io';
+
 import 'package:capstone/src/components/message_popup.dart';
+import 'package:capstone/src/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../pages/mainhome.dart';
 
 enum PageName { HOME, SEARCH, PLUS, EATPILL, USER }
 
 class BottomNavController extends GetxController {
   RxInt pageIndex = 0.obs;
   List<int> bottomHistory = [0];
+
+  @override
+  void onInit() {
+    super.onInit();
+    initNotification();
+  }
 
   void changeBottomNav(int value, {bool hasGesture = true}) {
     var page = PageName.values[value];
@@ -21,6 +28,8 @@ class BottomNavController extends GetxController {
       case PageName.SEARCH:
       case PageName.USER:
         _changePage(value, hasGesture: hasGesture);
+        // showNotification2('로바이틴정');
+        // showNotification();
         break;
     }
   }

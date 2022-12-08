@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:capstone/src/controller/add/addPillWithCameraController.dart';
-import 'package:capstone/src/controller/add/addpilltodatacontroller.dart';
-import 'package:capstone/src/controller/login/login_button_controller.dart';
 
-import 'package:capstone/network/dio_client.dart';
+import 'package:capstone/src/controller/add/addPillWithCameraController.dart';
+import 'package:capstone/src/controller/login/login_button_controller.dart';
 import 'package:capstone/src/model/pillsdata.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+
 import '../http/url.dart';
 import '../pages/pilldetail.dart';
 
@@ -27,6 +24,7 @@ class SearchController extends GetxController {
   RxString cameraPill = AddPillwithCameraController.to.result;
 
   RxBool prohibitExist = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -45,6 +43,7 @@ class SearchController extends GetxController {
           // ignore: prefer_interpolation_to_compose_strings
           'Authorization': 'Bearer ' + token1.value,
         });
+    log(SearchRequest.body);
     if (SearchRequest.statusCode == 200) {
       Get.back();
       List<dynamic> pillslist = jsonDecode(SearchRequest.body);
@@ -88,6 +87,7 @@ class SearchController extends GetxController {
           // ignore: prefer_interpolation_to_compose_strings
           'Authorization': 'Bearer ' + token1.value,
         });
+    log(SearchRequest.statusCode.toString());
 
     if (SearchRequest.statusCode == 200) {
       Get.back();

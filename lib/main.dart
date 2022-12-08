@@ -10,6 +10,7 @@ import 'package:capstone/src/pages/mainhome.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
 import 'src/app.dart';
 
 void main() {
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => splashScreen()),
-        GetPage(name: '/login', page: () => Login()),
+        GetPage(name: '/login', page: () => LoginPage()),
         GetPage(name: '/App', page: () => const App()),
         GetPage(
           name: '/Home',

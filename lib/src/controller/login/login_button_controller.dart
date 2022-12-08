@@ -2,22 +2,22 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:capstone/network/dio_client.dart';
-import 'package:capstone/src/controller/mainhome_controller.dart';
-import 'package:capstone/src/model/myallpills.dart';
-import 'package:dio/dio.dart';
 
-import '../../components/message_popup2.dart';
-import '../../http/url.dart';
 import 'package:capstone/src/http/url.dart';
+import 'package:capstone/src/model/myallpills.dart';
+import 'package:capstone/src/model/pillItemDB.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../../components/message_popup.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../components/message_popup.dart';
+import '../../components/message_popup2.dart';
+import '../../http/url.dart';
 import '../../model/mypills.dart';
 import '../../model/userData.dart';
+import '../../notification.dart';
+import '../../pages/login/login.dart';
 
 enum PageName { ID, PASSWORD }
 
@@ -28,7 +28,8 @@ class LoginButtonController extends GetxController {
   List<int> bottomHistory = [0];
   late TextEditingController idController;
   late TextEditingController passwordController;
-  static final storage = FlutterSecureStorage();
+  static final storage = const FlutterSecureStorage();
+
   dynamic userInfo = '';
   RxList myallpills = [].obs;
   RxInt allPillNum = 0.obs;
@@ -41,6 +42,7 @@ class LoginButtonController extends GetxController {
 
   RxList<List> pillsdata = [[], [], [], []].obs;
   RxInt pillNum = 0.obs;
+
   @override
   void onInit() {
     idController = TextEditingController();
@@ -62,11 +64,12 @@ class LoginButtonController extends GetxController {
       id(jsonDecode(userInfo)['user_id']);
       idController.text = id.toString();
       passwordController.text = jsonDecode(userInfo)['password'];
-      Timer(Duration(milliseconds: 500), () {
+      Timer(const Duration(milliseconds: 500), () {
         apiLogin(1);
       });
     } else {
-      print('로그인이 필요합니다');
+      Get.to(() => LoginPage());
+      log('로그인이 필요합니다');
     }
   }
 
@@ -79,6 +82,8 @@ class LoginButtonController extends GetxController {
           'id': idController.text,
           'password': passwordController.text
         }));
+
+    log(request.body);
 
     if (request.statusCode == 200) {
       log('login----------');
@@ -176,8 +181,8 @@ class LoginButtonController extends GetxController {
           createdDate: pill['createdDate'],
           medicineId: pill['medicineId'],
           medicineName: pill['medicineName'],
-          medicineSeq: pill['medicineSeq'],
-          image: pill['medicineImage'] ??= '');
+          medicineSeq: pill['medicineSeq'] ?? '',
+          image: pill['medicineImage'] ?? '');
       myallpills.add(pillItem);
     }
   }
@@ -232,7 +237,6 @@ class LoginButtonController extends GetxController {
               message: message,
               okCallback: () {
                 Get.back();
-                Get.back();
               },
               title: '복어',
             ));
@@ -263,8 +267,10 @@ class LoginButtonController extends GetxController {
           // ignore: prefer_interpolation_to_compose_strings
           'Authorization': 'Bearer ' + token1.value,
         });
+    // log(getMedicineRequest.statusCode.toString());
     if (getMedicineRequest.statusCode == 200) {
       List<dynamic> pillslist = jsonDecode(getMedicineRequest.body);
+      // log(pillslist.toString());
       pillNum(pillslist.length);
       for (int i = 0; i < pillslist.length; i++) {
         int eatingTime3 = 2; //오전 오후
@@ -282,19 +288,23 @@ class LoginButtonController extends GetxController {
             eatingTime = int.parse(time[0]);
           }
           pillsitem = MyPillsItem(
-              item_seq: pilllist['medicineSeq'],
-              item_name: pilllist['medicineName'],
-              eatingNum: pilllist['dosage'],
-              eatingTime: eatingTime,
-              eatingTime3: eatingTime3,
-              endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
-              hasEndDay: pilllist['hasEndDay'],
-              iseat: pilllist['activated'],
-              period: pilllist['period'],
-              image: (pilllist['medicineImage'] == null)
-                  ? ''
-                  : pilllist['medicineImage'],
-              medicineID: pilllist['medicineId']);
+            item_seq: pilllist['medicineSeq'] ?? '',
+            item_name: pilllist['medicineName'],
+            eatingNum: pilllist['dosage'],
+            eatingTime: eatingTime,
+            eatingTime2: time[1],
+            eatingTime3: eatingTime3,
+            endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
+            hasEndDay: pilllist['hasEndDay'],
+            iseat: pilllist['activated'],
+            period: pilllist['period'],
+            image: (pilllist['medicineImage'] == null)
+                ? ''
+                : pilllist['medicineImage'],
+            medicineID: pilllist['medicineId'],
+            medicineScheduleId: pilllist['medicineScheduleId'],
+            customMedicineId: pilllist['customMedicineId'] ?? -1,
+          );
           if (int.parse(time[0]) <= 9) {
             pillsdata[0].add(pillsitem);
           } else if (9 < int.parse(time[0]) && int.parse(time[0]) <= 17) {
@@ -304,21 +314,51 @@ class LoginButtonController extends GetxController {
           }
         } else {
           pillsitem = MyPillsItem(
-              item_seq: pilllist['medicineSeq'],
-              item_name: pilllist['medicineName'],
-              eatingNum: pilllist['dosage'],
-              eatingTime: 0,
-              eatingTime3: eatingTime3,
-              endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
-              hasEndDay: pilllist['hasEndDay'],
-              iseat: pilllist['activated'],
-              period: pilllist['period'],
-              image: (pilllist['medicineImage'] == null)
-                  ? ''
-                  : pilllist['medicineImage'],
-              medicineID: pilllist['medicineId']);
+            item_seq: pilllist['medicineSeq'] ?? '',
+            item_name: pilllist['medicineName'],
+            eatingNum: pilllist['dosage'],
+            eatingTime: 0,
+            eatingTime3: eatingTime3,
+            eatingTime2: '0',
+            endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
+            hasEndDay: pilllist['hasEndDay'],
+            iseat: pilllist['activated'],
+            period: pilllist['period'],
+            image: (pilllist['medicineImage'] == null)
+                ? ''
+                : pilllist['medicineImage'],
+            medicineID: pilllist['medicineId'],
+            medicineScheduleId: pilllist['medicineScheduleId'],
+            customMedicineId: pilllist['customMedicineId'] ?? -1,
+          );
           pillsdata[3].add(pillsitem);
         }
+      }
+      var pillsListExcept = pillsdata[0] + pillsdata[1] + pillsdata[2];
+      for (int i = 0; i < pillsListExcept.length; i++) {
+        await insertPillsDatabase(pillItemDB(
+            id: i,
+            day: DateTime.now().day,
+            name: pillsListExcept[i].item_name,
+            iseat: pillsListExcept[i].iseat ? 1 : 0,
+            time1: (pillsListExcept[i].eatingTime3 == 0)
+                ? pillsListExcept[i].eatingTime
+                : pillsListExcept[i].eatingTime + 12,
+            time2: int.parse(pillsListExcept[i].eatingTime2)));
+      }
+      // List a = await pillItemDBs();
+      // log(a[0].name.toString());
+      makeNotification();
+    }
+  }
+
+  makeNotification() async {
+    List a = await pillItemDBs();
+    for (int i = 0; i < a.length; i++) {
+      if (a[i].iseat == 0) {
+        String str = '${a[i].name}'.split('(')[0];
+        log(str);
+        showNotification2(str, a[i].time1, a[i].time2, a[i].id);
       }
     }
   }

@@ -7,16 +7,20 @@ import 'package:capstone/src/controller/seachpill_controller.dart';
 import 'package:capstone/src/model/pillsdata.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
+import 'package:table_calendar/table_calendar.dart';
 
 import '../components/message_popup.dart';
 import '../http/url.dart';
 import '../model/mypills.dart';
 
 class eatpillController extends GetxController {
-  Rx<DateTime> selecteddate = DateTime.now().obs;
-  Rx<DateTime> focuseddate = DateTime.now().obs;
+  Rx<DateTime> selecteddate = DateTime
+      .now()
+      .obs;
+  Rx<DateTime> focuseddate = DateTime
+      .now()
+      .obs;
   Rx<CalendarFormat> calendarFormat = CalendarFormat.week.obs;
   RxInt iseatclick = 0.obs;
   RxList<List> pillsdata = MainHomeController.to.pillsdata;
@@ -44,11 +48,12 @@ class eatpillController extends GetxController {
 
     log(item.iseat.toString());
     await http
-        .patch(Uri.parse('${urlBase}medicine?id=${item.medicineID}'), headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      // ignore: prefer_interpolation_to_compose_strings
-      'Authorization': 'Bearer ' + token1.value,
-    });
+        .patch(Uri.parse('${urlBase}medicine?id=${item.medicineScheduleId}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          // ignore: prefer_interpolation_to_compose_strings
+          'Authorization': 'Bearer ' + token1.value,
+        });
   }
 
   Future<void> getDayMedicine() async {
@@ -86,34 +91,42 @@ class eatpillController extends GetxController {
             eatingTime = int.parse(time[0]);
           }
           pillsitem = MyPillsItem(
-              item_seq: pilllist['medicineSeq'],
-              item_name: pilllist['medicineName'],
-              eatingNum: pilllist['dosage'],
-              eatingTime: eatingTime,
-              eatingTime3: eatingTime3,
-              endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
-              hasEndDay: pilllist['hasEndDay'],
-              iseat: pilllist['activated'],
-              period: pilllist['period'],
-              image: (pilllist['medicineImage'] == null)
-                  ? ''
-                  : pilllist['medicineImage'],
-              medicineID: pilllist['medicineId']);
+            item_seq: pilllist['medicineSeq'] ?? '',
+            item_name: pilllist['medicineName'],
+            eatingNum: pilllist['dosage'],
+            eatingTime: eatingTime,
+            eatingTime2: time[1],
+            eatingTime3: eatingTime3,
+            endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
+            hasEndDay: pilllist['hasEndDay'],
+            iseat: pilllist['activated'],
+            period: pilllist['period'],
+            image: (pilllist['medicineImage'] == null)
+                ? ''
+                : pilllist['medicineImage'],
+            medicineID: pilllist['medicineId'],
+            medicineScheduleId: pilllist['medicineScheduleId'],
+            customMedicineId: pilllist['customMedicineId'] ?? -1,
+          );
         } else {
           pillsitem = MyPillsItem(
-              item_seq: pilllist['medicineSeq'],
-              item_name: pilllist['medicineName'],
-              eatingNum: pilllist['dosage'],
-              eatingTime: 0,
-              eatingTime3: eatingTime3,
-              endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
-              hasEndDay: pilllist['hasEndDay'],
-              iseat: pilllist['activated'],
-              period: pilllist['period'],
-              image: (pilllist['medicineImage'] == null)
-                  ? ''
-                  : pilllist['medicineImage'],
-              medicineID: pilllist['medicineId']);
+            item_seq: pilllist['medicineSeq'] ?? '',
+            item_name: pilllist['medicineName'],
+            eatingNum: pilllist['dosage'],
+            eatingTime: 0,
+            eatingTime2: '0',
+            eatingTime3: eatingTime3,
+            endDay: (pilllist['hasEndDay']) ? pilllist['endDay'] : '',
+            hasEndDay: pilllist['hasEndDay'],
+            iseat: pilllist['activated'],
+            period: pilllist['period'],
+            image: (pilllist['medicineImage'] == null)
+                ? ''
+                : pilllist['medicineImage'],
+            medicineID: pilllist['medicineId'],
+            medicineScheduleId: pilllist['medicineScheduleId'],
+            customMedicineId: pilllist['customMedicineId'] ?? -1,
+          );
         }
         pills.add(pillsitem);
       }
@@ -144,27 +157,27 @@ class eatpillController extends GetxController {
   deleteMedicine(MyPillsItem item, int j) {
     showDialog(
         context: Get.context!,
-        builder: (context) => MessagePopup(
-            title: '약 삭제',
-            message: '${item.item_name}을 삭제하시겠습니까?',
-            cancelCallback: () => Get.back(),
-            okCallback: (() async {
-              log('deleting');
+        builder: (context) =>
+            MessagePopup(
+                title: '약 삭제',
+                message: '${item.item_name}을 삭제하시겠습니까?',
+                cancelCallback: () => Get.back(),
+                okCallback: (() async {
+                  log('deleting');
+                  pillItems.remove(item);
 
-              Get.dialog(Center(child: CircularProgressIndicator()),
-                  barrierDismissible: false);
-              await http.delete(
-                  Uri.parse('${urlBase}medicine?id=${item.medicineID}'),
-                  headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    // ignore: prefer_interpolation_to_compose_strings
-                    'Authorization': 'Bearer ' + token1.value,
-                  });
-              pillItems.remove(item);
+                  pillItems.refresh();
+                  await http.delete(
+                      Uri.parse(
+                          '${urlBase}medicine?id=${item.medicineScheduleId}'),
+                      headers: {
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        // ignore: prefer_interpolation_to_compose_strings
+                        'Authorization': 'Bearer ' + token1.value,
+                      });
 
-              pillItems.refresh();
-              Get.back();
-              Get.back();
-            })));
+                  Get.back();
+                  // Get.back();
+                })));
   }
 }

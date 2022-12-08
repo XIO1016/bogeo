@@ -1,6 +1,7 @@
-import 'package:capstone/src/pages/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../pages/login/login.dart';
 
 class SignUpComponent extends StatelessWidget {
   int id;
@@ -12,10 +13,12 @@ class SignUpComponent extends StatelessWidget {
     "성별을 알려주세요"
   ];
   var maincolor = Colors.blue;
+
   SignUpComponent(this.id, {super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: Get.width,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -60,7 +63,7 @@ class goOther extends StatelessWidget {
         alignment: Alignment.center,
         child: TextButton(
           onPressed: () {
-            Get.to(() => Login());
+            Get.to(() => LoginPage());
           },
           child: const Text(
             "복어에 가입하신 적 있으신가요? >",

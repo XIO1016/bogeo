@@ -1,6 +1,4 @@
-import 'package:capstone/main.dart';
 import 'package:capstone/src/components/Sbox.dart';
-import 'package:capstone/src/components/image_data.dart';
 import 'package:capstone/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +6,7 @@ import 'package:get/get.dart';
 
 class UserPage extends GetView<UserController> {
   UserPage({super.key});
+
   static Color maincolor = const Color(0xff0057A8);
   static Color blackcolor = const Color(0xff505050);
 
@@ -71,58 +70,60 @@ class UserPage extends GetView<UserController> {
   List<Widget> AllPill() {
     return List.generate(
       controller.pillNum.value,
-      ((i) => GestureDetector(
-            onTap: () {
-              controller.getDetail(controller.myallpills[i]);
-            },
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(30, 20, 30, 30),
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      width: 1,
-                      color: Color(0xffE4E4E4),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            controller.myallpills[i].createdDate,
-                            style: const TextStyle(
-                                color: Color(0xffBABABA),
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal),
-                          ),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          SizedBox(
-                            width: 280,
-                            child: RichText(
-                                text: TextSpan(
-                              text: controller.myallpills[i].medicineName,
-                              style: TextStyle(
-                                  color: blackcolor,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          )
-                        ],
-                      ),
-                      SvgPicture.asset('assets/icons/arrow.svg')
-                    ],
+      ((i) =>
+          Column(
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(30, 20, 30, 30),
+                width: Get.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    width: 1,
+                    color: Color(0xffE4E4E4),
                   ),
                 ),
-                Sbox(0, 20)
-              ],
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          controller.myallpills[i].createdDate,
+                          style: const TextStyle(
+                              color: Color(0xffBABABA),
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          height: 3,
+                        ),
+                        SizedBox(
+                          width: 280,
+                          child: RichText(
+                              text: TextSpan(
+                                text: controller.myallpills[i].medicineName,
+                                style: TextStyle(
+                                    color: blackcolor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                        )
+                      ],
+                    ), (controller.myallpills[i].medicineSeq != '')
+                        ?
+                    GestureDetector(
+                        onTap: () {
+                          controller.getDetail(controller.myallpills[i]);
+                        },
+                        child: SvgPicture.asset('assets/icons/arrow.svg'))
+                        : SizedBox(),
+                  ],
+                ),
+              ),
+              Sbox(0, 20)
+            ],
           )),
     );
   }

@@ -12,9 +12,11 @@ import 'mainhome.dart';
 
 class EatPillPage extends GetView<eatpillController> {
   EatPillPage({super.key});
+
   var today = DateTime.now();
 
   static List<String> time1 = ['오전', '오후', ''];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -241,14 +243,27 @@ class EatPillPage extends GetView<eatpillController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               (pillsdata[j].eatingTime != 0)
-                                  ? Text(
-                                      '${time1[pillsdata[j].eatingTime3]} ${pillsdata[j].eatingTime}시에 드세요',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(
-                                            0xff628EFF,
-                                          )),
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                          '${time1[pillsdata[j].eatingTime3]} ${pillsdata[j].eatingTime}시',
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(
+                                                0xff628EFF,
+                                              )),
+                                        ),
+                                        Text(
+                                          ' ${pillsdata[j].eatingTime2}분에 드세요',
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(
+                                                0xff628EFF,
+                                              )),
+                                        ),
+                                      ],
                                     )
                                   : const SizedBox(),
                             ],
@@ -284,18 +299,20 @@ class EatPillPage extends GetView<eatpillController> {
                                   )
                                 ],
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  controller.getDetail(pillsdata[j]);
-                                },
-                                child: const Text(
-                                  '약 정보 보기 >',
-                                  style: TextStyle(
-                                      color: Color(0xffE4E4E4),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
+                              (pillsdata[j].item_seq == '')
+                                  ? SizedBox()
+                                  : GestureDetector(
+                                      onTap: () {
+                                        controller.getDetail(pillsdata[j]);
+                                      },
+                                      child: const Text(
+                                        '약 정보 보기 >',
+                                        style: TextStyle(
+                                            color: Color(0xffE4E4E4),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
                             ],
                           ),
                           const SizedBox(

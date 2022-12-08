@@ -8,6 +8,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import 'addBySelf.dart';
+
 class addpillPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class addpillPage extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-                onTap: (() => Get.to(AddPillwithCamera())),
+                onTap: (() => Get.to(CamerPage())),
                 child: _list('처방전으로', 'tabler_clipboard-plus')),
             Sbox(0, 20),
             GestureDetector(
@@ -53,7 +55,9 @@ class addpillPage extends StatelessWidget {
                 onTap: () => Get.to(SearchPillPage()),
                 child: _list('검색해서', 'tabler_search')),
             Sbox(0, 20),
-            _list('직접', 'pepicons_pen')
+            GestureDetector(
+                onTap: () => Get.to(addBySelfPage()),
+                child: _list('직접', 'pepicons_pen'))
           ],
         ),
       ),

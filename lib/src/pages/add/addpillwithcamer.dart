@@ -4,10 +4,11 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:capstone/src/components/Sbox.dart';
 import 'package:capstone/src/pages/mainhome.dart';
+import 'package:cross_file_image/cross_file_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../controller/add/addPillWithCameraController.dart';
-import 'package:cross_file_image/cross_file_image.dart';
 
 class AddPillwithCamera extends GetView<AddPillwithCameraController> {
   @override
@@ -73,7 +74,9 @@ class AddPillwithCamera extends GetView<AddPillwithCameraController> {
                               onTap: () {
                                 int val = 0;
                                 log(val.toString());
-                                Get.to(() => CamerPage(), arguments: val);
+
+                                controller.getImageFromCamera(1);
+                                // Get.to(() => CamerPage(), arguments: val);
                               },
                               child: Container(
                                 width: 135,
@@ -101,7 +104,8 @@ class AddPillwithCamera extends GetView<AddPillwithCameraController> {
                                 onTap: () {
                                   int val = 1;
                                   log(val.toString());
-                                  Get.to(() => CamerPage(), arguments: val);
+                                  controller.getImageFromCamera(2);
+                                  // Get.to(() => CamerPage(), arguments: val);
                                 },
                                 child: Container(
                                   width: 135,

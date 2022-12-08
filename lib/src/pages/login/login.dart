@@ -3,9 +3,8 @@ import 'package:capstone/src/controller/login/login_button_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Login extends GetView<LoginButtonController> {
+class LoginPage extends GetView<LoginButtonController> {
   var maincolor = Colors.blue;
-  Login({super.key});
 
   @override
   Widget build(BuildContext context) {

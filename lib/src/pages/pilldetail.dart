@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:capstone/src/components/Sbox.dart';
 import 'package:capstone/src/controller/detailPillController.dart';
 import 'package:capstone/src/model/pillsdata.dart';
@@ -290,7 +289,7 @@ class DetailPillPage extends GetView<DetailPillController> {
 Widget PlusWidget(PillsItem pill) {
   return GestureDetector(
     onTap: () {
-      Get.to(() => AddPillToData(), arguments: [0, pill]);
+      Get.to(() => AddPillToData(), arguments: [0, pill, 1]);
     },
     child: Container(
       width: Get.width,

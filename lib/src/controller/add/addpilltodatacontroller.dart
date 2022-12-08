@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:capstone/src/http/url.dart';
-import 'package:capstone/src/pages/add/addpilltodata.dart';
-import 'package:capstone/src/pages/mainhome.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../app.dart';
 import '../../model/pillsdata.dart';
@@ -17,9 +17,10 @@ class AddPillToDataController extends GetxController {
   static AddPillToDataController get to => Get.find<AddPillToDataController>();
   var id = LoginButtonController.to.id;
   RxString token1 = LoginButtonController.to.token1;
-
+  RxInt postType = 0.obs;
   RxInt eatPeriod = 0.obs;
   List week = ['월', '화', '수', '목', '금', '토', '일'];
+  TextEditingController pillName = TextEditingController();
   TextEditingController interval = TextEditingController();
   TextEditingController pillNum = TextEditingController();
   TextEditingController timehour = TextEditingController();
@@ -42,6 +43,8 @@ class AddPillToDataController extends GetxController {
   ].obs;
   RxInt eatEnding = 0.obs;
   RxBool hasmedicinetime = false.obs;
+  var selectedImagePath = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -108,38 +111,96 @@ class AddPillToDataController extends GetxController {
         time = int.parse(timehour.text);
       } else if (ampm.value == 2) {
         time = int.parse(timehour.text) + 12;
+        if (time == 24) {
+          time = 0;
+        }
       }
     } else {
       time = -1;
     }
+    var request;
+    if (postType.value == 1) {
+      request = await http.post(
+          Uri.parse('${urlBase}medicine?id=$id&seq=${pill.item_seq}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            // ignore: prefer_interpolation_to_compose_strings
+            'Authorization': 'Bearer ' + token1.value,
+          },
+          body: jsonEncode(<String, dynamic>{
+            'medicineSeq': pill.item_seq,
+            'periodType': eatPeriod.value,
+            'period': period,
+            'hasEndDay': (eatEnding == 0) ? false : true,
+            'endDay': (eatEnding == 1)
+                ? '${selectedDate.value.year}-${selectedDate.value.month}-${selectedDate.value.day}'
+                : null,
+            'hasMedicineTime': hasmedicinetime.value,
+            'medicineHour': time,
+            'medicineMinute':
+                (hasmedicinetime.value) ? int.parse(timeminute.text) : -1,
+            'dosage': int.parse(pillNum.text)
+          }));
+      log(utf8.decode(request.bodyBytes));
+      if (request.statusCode == 200) {
+        Get.to(App());
 
-    var request = await http.post(
-        Uri.parse('${urlBase}medicine?id=$id&seq=${pill.item_seq}'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          // ignore: prefer_interpolation_to_compose_strings
-          'Authorization': 'Bearer ' + token1.value,
-        },
-        body: jsonEncode(<String, dynamic>{
-          'medicineSeq': pill.item_seq,
-          'periodType': eatPeriod.value,
-          'period': period,
-          'hasEndDay': (eatEnding == 0) ? false : true,
-          'endDay': (eatEnding == 1)
-              ? '${selectedDate.value.year}-${selectedDate.value.month}-${selectedDate.value.day}'
-              : null,
-          'hasMedicineTime': hasmedicinetime.value,
-          'medicineHour': time,
-          'medicineMinute':
-              (hasmedicinetime.value) ? int.parse(timeminute.text) : -1,
-          'dosage': int.parse(pillNum.text)
-        }));
+        LoginButtonController.to.getMyPills();
+        LoginButtonController.to.getMyallPills();
+      }
+    } else if (postType.value == 2) {
+      request = http.MultipartRequest(
+        'POST',
+        Uri.parse('${urlBase}custom/medicine'),
+      );
+      log('시작');
+      request.headers.addAll({
+        "Accept": "application/json",
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ' + token1.value,
+      });
+      var f =
+          await http.MultipartFile.fromPath('file', selectedImagePath.value);
+      request.files.add(f);
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'medicineDto',
+          utf8.encode(jsonEncode(<String, dynamic>{
+            'userId': id.value,
+            'medicineName': pillName.text,
+            'periodType': eatPeriod.value,
+            'period': period,
+            'hasEndDay': (eatEnding == 0) ? false : true,
+            'endDay': (eatEnding == 1)
+                ? '${selectedDate.value.year}-${selectedDate.value.month}-${selectedDate.value.day}'
+                : null,
+            'hasMedicineTime': hasmedicinetime.value,
+            'medicineHour': time,
+            'medicineMinute':
+                (hasmedicinetime.value) ? int.parse(timeminute.text) : -1,
+            'dosage': int.parse(pillNum.text)
+          })),
+          contentType: MediaType(
+            'application',
+            'json',
+            {'charset': 'utf-8'},
+          ),
+        ),
+      );
+      log('성공');
+      var response = await request.send();
+      log(response.statusCode.toString());
+      // log(player.fields.values.toString());
+      log(request.files.toString());
 
-    if (request.statusCode == 200) {
-      Get.to(App());
+      if (response.statusCode == 200) {
+        Get.to(App());
 
-      LoginButtonController.to.getMyPills();
-      LoginButtonController.to.getMyallPills();
+        LoginButtonController.to.getMyPills();
+        LoginButtonController.to.getMyallPills();
+      }
+    } else {
+      log('ERROR');
     }
   }
 
@@ -153,6 +214,30 @@ class AddPillToDataController extends GetxController {
       case 3:
         pageIndex(pageIndex.value - 1);
         break;
+    }
+  }
+
+  void getImage(ImageSource imageSource) async {
+    final pickedFile = await ImagePicker().pickImage(source: imageSource);
+    if (pickedFile != null) {
+      selectedImagePath(pickedFile.path);
+      update();
+    } else {}
+  }
+
+  Widget validateImage(String imageUrl) {
+    if (Uri.parse(imageUrl).isAbsolute) {
+      return Image.network(
+        imageUrl,
+        width: 117,
+        height: 65,
+      );
+    } else {
+      return Image(
+        image: FileImage(File(selectedImagePath.value)),
+        width: 117,
+        height: 65,
+      );
     }
   }
 }

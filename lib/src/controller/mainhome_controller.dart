@@ -1,17 +1,14 @@
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:capstone/src/components/image_data.dart';
 import 'package:capstone/src/components/message_popup.dart';
 import 'package:capstone/src/model/mypills.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import '../http/url.dart';
-import '../model/pillsdata.dart';
 import 'login/login_button_controller.dart';
 
 class MainHomeController extends GetxController
@@ -23,6 +20,7 @@ class MainHomeController extends GetxController
   RxInt index = 0.obs;
   RxList<List> pillsdata = LoginButtonController.to.pillsdata;
   RxInt pillNum = LoginButtonController.to.pillNum;
+
   static MainHomeController get to => Get.find<MainHomeController>();
   late TabController tabController;
   RxString token1 = LoginButtonController.to.token1;
@@ -109,12 +107,13 @@ class MainHomeController extends GetxController
       item.iseat = false;
     }
     pillsdata.refresh();
-    await http
-        .patch(Uri.parse('${urlBase}medicine?id=${item.medicineID}'), headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      // ignore: prefer_interpolation_to_compose_strings
-      'Authorization': 'Bearer ' + token1.value,
-    });
+    await http.patch(
+        Uri.parse('${urlBase}medicine?id=${item.medicineScheduleId}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          // ignore: prefer_interpolation_to_compose_strings
+          'Authorization': 'Bearer ' + token1.value,
+        });
   }
 
   deleteMedicine(MyPillsItem item, int i, int j) {
@@ -126,21 +125,18 @@ class MainHomeController extends GetxController
             cancelCallback: () => Get.back(),
             okCallback: (() async {
               log('deleting');
-
-              Get.dialog(Center(child: CircularProgressIndicator()),
-                  barrierDismissible: false);
+              pillsdata[i].remove(item);
+              pillsdata.refresh();
               await http.delete(
-                  Uri.parse('${urlBase}medicine?id=${item.medicineID}'),
+                  Uri.parse('${urlBase}medicine?id=${item.medicineScheduleId}'),
                   headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
                     // ignore: prefer_interpolation_to_compose_strings
                     'Authorization': 'Bearer ' + token1.value,
                   });
-              pillsdata[i].remove(item);
 
-              pillsdata.refresh();
               Get.back();
-              Get.back();
+              // Get.back();
             })));
   }
 }
