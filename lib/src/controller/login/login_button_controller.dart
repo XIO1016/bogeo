@@ -124,7 +124,7 @@ class LoginButtonController extends GetxController {
 
   Future<void> _getProfile(String t1, String t2) async {
     var profileRequest =
-        await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
+    await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       // ignore: prefer_interpolation_to_compose_strings
       'Authorization': 'Bearer ' + token1.value,
@@ -133,7 +133,7 @@ class LoginButtonController extends GetxController {
       print(profileRequest.headers);
 
       profileRequest =
-          await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
+      await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         // ignore: prefer_interpolation_to_compose_strings
         'Authorization': 'Bearer ' + token1.value,
@@ -156,7 +156,7 @@ class LoginButtonController extends GetxController {
   Future<void> getMyallPills() async {
     myallpills([]);
     var mypageRequest =
-        await http.get(Uri.parse('${urlBase}medicine/mypage?id=$id'), headers: {
+    await http.get(Uri.parse('${urlBase}medicine/mypage?id=$id'), headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       // ignore: prefer_interpolation_to_compose_strings
       'Authorization': 'Bearer ' + token1.value,
@@ -165,7 +165,7 @@ class LoginButtonController extends GetxController {
       print(mypageRequest.headers);
 
       mypageRequest =
-          await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
+      await http.get(Uri.parse('$urlBase$urlProfile?id=$id'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         // ignore: prefer_interpolation_to_compose_strings
         'Authorization': 'Bearer ' + token1.value,
@@ -211,7 +211,8 @@ class LoginButtonController extends GetxController {
     if (bottomHistory.length == 1) {
       showDialog(
           context: Get.context!,
-          builder: (context) => MessagePopup(
+          builder: (context) =>
+              MessagePopup(
                 message: '종료하시겠습니까?',
                 okCallback: () {
                   exit(0);
@@ -233,7 +234,8 @@ class LoginButtonController extends GetxController {
   Future<bool> LoginError(String message) async {
     showDialog(
         context: Get.context!,
-        builder: (context) => MessagePopup2(
+        builder: (context) =>
+            MessagePopup2(
               message: message,
               okCallback: () {
                 Get.back();
@@ -256,9 +258,15 @@ class LoginButtonController extends GetxController {
 
   Future getMyPills() async {
     pillsdata([[], [], [], []]);
-    var todayyear = DateTime.now().year;
-    var todaymonth = DateTime.now().month;
-    var todayday = DateTime.now().day;
+    var todayyear = DateTime
+        .now()
+        .year;
+    var todaymonth = DateTime
+        .now()
+        .month;
+    var todayday = DateTime
+        .now()
+        .day;
     var getMedicineRequest = await http.get(
         Uri.parse(
             '${urlBase}medicine?id=${id}&year=$todayyear&month=$todaymonth&day=$todayday'),
@@ -267,13 +275,14 @@ class LoginButtonController extends GetxController {
           // ignore: prefer_interpolation_to_compose_strings
           'Authorization': 'Bearer ' + token1.value,
         });
-    // log(getMedicineRequest.statusCode.toString());
+    log(getMedicineRequest.body.toString());
     if (getMedicineRequest.statusCode == 200) {
       List<dynamic> pillslist = jsonDecode(getMedicineRequest.body);
       // log(pillslist.toString());
       pillNum(pillslist.length);
       for (int i = 0; i < pillslist.length; i++) {
         int eatingTime3 = 2; //오전 오후
+
         Map pilllist = pillslist[i];
         var pillsitem;
         int eatingTime;
@@ -338,7 +347,9 @@ class LoginButtonController extends GetxController {
       for (int i = 0; i < pillsListExcept.length; i++) {
         await insertPillsDatabase(pillItemDB(
             id: i,
-            day: DateTime.now().day,
+            day: DateTime
+                .now()
+                .day,
             name: pillsListExcept[i].item_name,
             iseat: pillsListExcept[i].iseat ? 1 : 0,
             time1: (pillsListExcept[i].eatingTime3 == 0)

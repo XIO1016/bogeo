@@ -22,6 +22,7 @@ class SearchController extends GetxController {
   var token2 = LoginButtonController.to.token2;
   var id = LoginButtonController.to.id;
   RxString cameraPill = AddPillwithCameraController.to.result;
+  RxString ocrResult = AddPillwithCameraController.to.ocrResult;
 
   RxBool prohibitExist = false.obs;
 

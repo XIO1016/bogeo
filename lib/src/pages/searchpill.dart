@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:capstone/src/pages/mainhome.dart';
-import 'package:capstone/src/pages/pilldetail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -205,8 +204,13 @@ class SearchPillPage extends GetView<SearchController> {
     if (Get.arguments != null) {
       log('message');
       Future.delayed(Duration.zero, () {
-        controller.searchTextEditingController.text =
-            controller.cameraPill.value;
+        if (Get.arguments[1] == 1) {
+          controller.searchTextEditingController.text =
+              controller.cameraPill.value;
+        } else {
+          controller.searchTextEditingController.text =
+              controller.ocrResult.value;
+        }
         controller.getPillsFromData();
       });
     }

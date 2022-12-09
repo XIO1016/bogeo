@@ -1,10 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:capstone/src/components/Sbox.dart';
-import 'package:capstone/src/pages/mainhome.dart';
-import 'package:cross_file_image/cross_file_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -130,118 +127,118 @@ class AddPillwithCamera extends GetView<AddPillwithCameraController> {
     );
   }
 }
+//
+// class CamerPage extends GetView<AddPillwithCameraController> {
+//   final index = Get.arguments;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     log(index.toString());
+//     return Scaffold(
+//       body: SafeArea(
+//         child: Column(children: [
+//           Container(
+//             height: 80,
+//             color: Colors.white,
+//             child: Center(
+//               child: Row(
+//                 children: [
+//                   const SizedBox(
+//                     width: 10,
+//                   ),
+//                   IconButton(
+//                       onPressed: () => Get.back(),
+//                       icon: Icon(Icons.arrow_back_ios)),
+//                   Text(
+//                     '촬영',
+//                     style: TextStyle(
+//                         color: MainHome.blackcolor,
+//                         fontFamily: 'Sans',
+//                         fontSize: 22,
+//                         fontWeight: FontWeight.bold),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           SizedBox(
+//               width: Get.width,
+//               height: 600,
+//               child: CameraPreview(controller.cameraController)),
+//         ]),
+//       ),
+//       bottomSheet: Container(
+//         color: Colors.white,
+//         height: Get.height - 690,
+//         width: Get.width,
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceAround,
+//           children: [
+//             IconButton(
+//               icon: Icon(
+//                 Icons.wallpaper,
+//                 color: MainHome.blackcolor,
+//                 size: 30,
+//               ),
+//               onPressed: () async {
+//                 controller.getImageFromGallery();
+//                 // if (controller.imagePath != '') {
+//                 //   showImage();
+//                 // }
+//               },
+//             ),
+//             Center(
+//               child: Container(
+//                 color: Colors.white,
+//                 child: IconButton(
+//                   onPressed: (() async {
+//                     XFile file =
+//                         await controller.cameraController.takePicture();
+//
+//                     showImage(file);
+//
+//                     if (index == 0) {
+//                       controller.firstimage(file.path);
+//                       log(file.path);
+//                     } else {
+//                       controller.secondimage(file.path);
+//                     }
+//                   }),
+//                   icon: Icon(
+//                     color: MainHome.blackcolor,
+//                     Icons.camera,
+//                     size: 35,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Container(
+//               width: 35,
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
-class CamerPage extends GetView<AddPillwithCameraController> {
-  final index = Get.arguments;
-
-  @override
-  Widget build(BuildContext context) {
-    log(index.toString());
-    return Scaffold(
-      body: SafeArea(
-        child: Column(children: [
-          Container(
-            height: 80,
-            color: Colors.white,
-            child: Center(
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  IconButton(
-                      onPressed: () => Get.back(),
-                      icon: Icon(Icons.arrow_back_ios)),
-                  Text(
-                    '촬영',
-                    style: TextStyle(
-                        color: MainHome.blackcolor,
-                        fontFamily: 'Sans',
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-              width: Get.width,
-              height: 600,
-              child: CameraPreview(controller.cameraController)),
-        ]),
-      ),
-      bottomSheet: Container(
-        color: Colors.white,
-        height: Get.height - 690,
-        width: Get.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(
-                Icons.wallpaper,
-                color: MainHome.blackcolor,
-                size: 30,
-              ),
-              onPressed: () async {
-                controller.getImageFromGallery();
-                // if (controller.imagePath != '') {
-                //   showImage();
-                // }
-              },
-            ),
-            Center(
-              child: Container(
-                color: Colors.white,
-                child: IconButton(
-                  onPressed: (() async {
-                    XFile file =
-                        await controller.cameraController.takePicture();
-
-                    showImage(file);
-
-                    if (index == 0) {
-                      controller.firstimage(file.path);
-                      log(file.path);
-                    } else {
-                      controller.secondimage(file.path);
-                    }
-                  }),
-                  icon: Icon(
-                    color: MainHome.blackcolor,
-                    Icons.camera,
-                    size: 35,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: 35,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _onPictureSelection() async {
-    controller.getImageFromGallery();
-  }
-
-  Future<bool> showImage(XFile xfile) async {
-    showDialog(
-        context: Get.context!,
-        builder: (context) => AlertDialog(
-              content: Image(image: XFileImage(xfile)),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Get.back();
-                      Get.back();
-                    },
-                    child: Text('확인'))
-              ],
-            ));
-    return true;
-  }
-}
+//   _onPictureSelection() async {
+//     controller.getImageFromGallery();
+//   }
+//
+//   Future<bool> showImage(XFile xfile) async {
+//     showDialog(
+//         context: Get.context!,
+//         builder: (context) => AlertDialog(
+//               content: Image(image: XFileImage(xfile)),
+//               actions: [
+//                 TextButton(
+//                     onPressed: () {
+//                       Get.back();
+//                       Get.back();
+//                     },
+//                     child: Text('확인'))
+//               ],
+//             ));
+//     return true;
+//   }
+// }

@@ -95,6 +95,9 @@ class addBySelfPage extends GetView<AddPillToDataController> {
                       width: 200,
                       height: 200,
                       child: Obx(() => picture())),
+                  SizedBox(
+                    height: 80,
+                  )
                 ])
               ],
             ),

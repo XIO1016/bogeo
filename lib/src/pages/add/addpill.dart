@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../controller/add/addPillWithCameraController.dart';
 import 'addBySelf.dart';
 
 class addpillPage extends StatelessWidget {
@@ -42,7 +43,8 @@ class addpillPage extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-                onTap: (() => Get.to(CamerPage())),
+                onTap: (() =>
+                    AddPillwithCameraController.to.getImageFromGallery()),
                 child: _list('처방전으로', 'tabler_clipboard-plus')),
             Sbox(0, 20),
             GestureDetector(

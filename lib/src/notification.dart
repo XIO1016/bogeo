@@ -1,11 +1,12 @@
 import 'dart:ui';
 
-import 'package:capstone/src/pages/mainhome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+
+import 'app.dart';
 
 final notifications = FlutterLocalNotificationsPlugin();
 
@@ -27,7 +28,7 @@ initNotification() async {
   );
   await notifications.initialize(initializationSettings,
       onDidReceiveNotificationResponse: (payload) {
-    Get.to(() => MainHome());
+    Get.to(() => App());
     // Navigator.push(
     //     context, MaterialPageRoute(builder: (c) => Text('새로운페이지')));
   }

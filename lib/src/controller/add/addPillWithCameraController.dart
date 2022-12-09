@@ -12,6 +12,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
+import '../../model/pillsName.dart';
+import '../../pages/add/addWithOcr.dart';
+import '../login/login_button_controller.dart';
+
 class AddPillwithCameraController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static AddPillwithCameraController get to =>
@@ -27,15 +31,8 @@ class AddPillwithCameraController extends GetxController
   RxString firstimage = ''.obs;
   RxString secondimage = ''.obs;
   RxString result = ''.obs;
+  RxString ocrResult = ''.obs;
 
-  // match('포타리온정 아르시딘에프정 333 ', PillsNameToOCR);
-  // void match(String string, String regex) {
-  //   var text = '$string: $regex => ';
-  //   for (final match in RegExp(regex).allMatches(string)) {
-  //     text = '$text(${match[0]})';
-  //   }
-  //   print(text);
-  // }
   @override
   void onInit() {
     // TODO: implement onInit
@@ -90,45 +87,32 @@ class AddPillwithCameraController extends GetxController
     }
   }
 
-  // void readyToCamera() async {
-  //   // 사용할 수 있는 카메라 목록을 OS로부터 받아 옵니다.
-  //   final cameras = await availableCameras();
-  //   if (0 == cameras.length) {
-  //     print("not found any cameras");
-  //     return;
-  //   }
-  //
-  //   CameraDescription frontCamera = cameras.first;
-  //
-  //   cameraController = CameraController(
-  //       frontCamera, ResolutionPreset.max // 가장 높은 해상도의 기능을 쓸 수 있도록 합니다.
-  //       );
-  //   cameraController.initialize().then((value) {
-  //     // 카메라 준비가 끝나면 카메라 미리보기를 보여주기 위해 앱 화면을 다시 그립니다.
-  //     cameraInitialized(true);
-  //   });
-  // }
+  String match(String string, String regex) {
+    String text = '';
+    for (final match in RegExp(regex).allMatches(string)) {
+      text = '${match[0]}';
+    }
+    return text;
+  }
 
   Future PostOcrApi(String i) async {
-    // var bytes = i.codeUnits;
-    // String img64 = base64Encode(bytes);
+    Get.dialog(Center(child: CircularProgressIndicator()),
+        barrierDismissible: false);
+    var id = LoginButtonController.to.id;
+    RxString token1 = LoginButtonController.to.token1;
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('${urlBase}search/ocr'),
+    );
+    log('시작');
+    request.headers.addAll({
+      "Accept": "application/json",
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ' + token1.value,
+    });
+    var f = await http.MultipartFile.fromPath('file', i);
+    request.files.add(f);
 
-    var request = http.MultipartRequest("POST", Uri.parse(ocrurl));
-
-    request.headers
-        .addAll({'Content-Type': 'application/json', 'X-OCR-SECRET': ocrkey});
-    // request.files.add(await http.MultipartFile.fromPath('image', i));
-    // log(request.files[0].filename.toString());
-    request.fields['lang'] = 'ko';
-    request.fields['requestId'] = 'string';
-    request.fields['resultType'] = 'string';
-    request.fields['timestamp'] =
-        DateTime.now().millisecondsSinceEpoch.toString();
-    request.fields['version'] = 'V1';
-    request.fields['image'] = [
-      utf8.encode(jsonEncode(
-          {'format': 'png', 'name': 'medium', 'data': null, 'url': i}))
-    ].toString();
     log(request.fields.toString());
     try {
       var response = await request.send();
@@ -138,11 +122,47 @@ class AddPillwithCameraController extends GetxController
 
       try {
         if (response.statusCode == 200) {
-          await response.stream.bytesToString().then((value) {
-            print(value);
+          await response.stream.bytesToString().then((value) async {
+            log(value);
+            var im = jsonDecode(value);
+            Map image = {
+              "format": "jpg",
+              "name": "medium",
+              "data": null,
+              "url": im['imageUrl']
+            };
+            List l = [];
+            l.add(image);
+            var timestamp = DateTime.now().millisecondsSinceEpoch;
+            var requestOcr = await http.post(Uri.parse(ocrurl),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'X-OCR-SECRET': ocrkey
+                },
+                body: jsonEncode(<String, dynamic>{
+                  "images": l,
+                  "lang": "ko",
+                  "requestId": "string",
+                  "resultType": "string",
+                  "timestamp": timestamp,
+                  "version": "V1"
+                }));
 
-            result(json.decode(value)['result']);
-            Get.to(() => SearchPillPage(), arguments: true);
+            var responseOcr = jsonDecode(requestOcr.body);
+            List imagesOcr = responseOcr['images'][0]['fields'];
+            List resultList = [];
+            for (int i = 0; i < imagesOcr.length; i++) {
+              Map field = imagesOcr[i];
+              String tryOcr = field['inferText'];
+              if (tryOcr.length > 4) {
+                String t = match(tryOcr, PillsNameToOCR);
+                if (t != '') {
+                  resultList.add(t);
+                }
+              }
+            }
+            Get.back();
+            Get.to(() => AddPillwithOcr(), arguments: [resultList]);
           });
         } else {
           await response.stream.bytesToString().then((value) {
@@ -178,11 +198,12 @@ class AddPillwithCameraController extends GetxController
 
       try {
         if (response.statusCode == 200) {
+          Get.back();
           await response.stream.bytesToString().then((value) {
             print(value);
 
             result(json.decode(value)['result']);
-            Get.to(() => SearchPillPage(), arguments: true);
+            Get.to(() => SearchPillPage(), arguments: [true, 1]);
           });
         } else {
           await response.stream.bytesToString().then((value) {
