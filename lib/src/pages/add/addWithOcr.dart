@@ -1,3 +1,4 @@
+import 'package:capstone/src/pages/add/addpill.dart';
 import 'package:capstone/src/pages/mainhome.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,7 @@ class AddPillwithOcr extends GetView<AddPillwithCameraController> {
           icon: Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
             Get.back();
+            Get.to(addpillPage());
           },
         ),
       ),
@@ -38,6 +40,7 @@ class AddPillwithOcr extends GetView<AddPillwithCameraController> {
       children: [
         GestureDetector(
           onTap: () {
+            controller.ocrResult(i);
             Get.to(() => SearchPillPage(), arguments: [true, 2]);
           },
           child: Container(
