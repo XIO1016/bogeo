@@ -1,16 +1,4 @@
-# capstone
+# 3-2 Capstone project로 제출한 프로젝트입니다.
+Flutter를 이용해 프론트엔드를 구현했습니다.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+전체 프로젝트 코드: <href: https://github.com/cau-Bogeo>
